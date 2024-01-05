@@ -1,9 +1,15 @@
 '''Module containing general utility functions'''
 
-import boto3
+import math
 import os
+import random
 import shlex
 import subprocess
+
+import numpy as np
+import pandas as pd
+
+from datetime import datetime
 
 
 def remove_folder(folder, is_on_s3=False):
@@ -100,3 +106,75 @@ def upload_parameter_file_to_s3(experiment_name, parameter_filepath):
             f'{parameter_filepath} '
             f's3://velia-piperuns-dev/{experiment_name}/')
     subprocess.run(shlex.split(upload_parameters_to_db))
+
+
+def process_data_frame(df):
+    df = df.dropna(axis=0, how="all", ignore_index=True)
+    df = df.T
+    header = df.iloc[0]
+    df = df[1:]
+    df.columns = header
+    df.fillna('', inplace=True)
+    return df
+
+
+def parse_samplesheet(sample_csv_path):
+    """
+    """
+    sample_df = pd.DataFrame()
+    job_df = pd.DataFrame()
+    reading_status = {"sample": False, "job": False}
+    for index, row in pd.read_csv(sample_csv_path, header=None).iterrows():
+        if np.all([str(val).strip() in ["", "nan"] for _, val in row.items()]):
+            continue
+
+        if str(row.iloc[0]).strip().startswith("["):
+            for content_type in reading_status:
+                reading_status[content_type] = False
+            if str(row.iloc[0]).strip() == "[Samples]":
+                reading_status["sample"] = True
+            if str(row.iloc[0]).strip() == "[Riboseq_jobs]":
+                reading_status["job"] = True
+            continue
+
+        if reading_status["sample"]:
+            sample_df = pd.concat([sample_df, row], ignore_index = True, axis=1)
+        if reading_status["job"]:
+            job_df = pd.concat([job_df, row], ignore_index = True, axis=1)
+
+    sample_df = process_data_frame(sample_df)
+    job_df = process_data_frame(job_df)
+    
+    sample_df.set_index('sample_id', inplace=True)
+    
+    return sample_df, job_df
+
+
+def build_json(sample_df, jobs_df, params):
+    """Reads parameters from a CSV file."""
+
+    for index, row in jobs_df.iterrows():
+        
+        job_name = f"VPR_orfcalling_{params['timestamp']}"
+        if params["skip_orfcalling"]:
+            job_name += "_mapping_only"
+        
+        chx_samples = row["CHX"].split(';')
+        chx_sample_df = sample_df.loc[chx_samples]
+        job_name = f"{job_name}_{'_'.join(chx_sample_df.index)}"
+
+        sample_paths_s3 = chx_sample_df['containing_folder'] + chx_sample_df['R1_fastq_file'].to_list()
+        
+        piperun_dict['experiment_name'] = job_name
+        piperun_dict['sample_paths_s3'] = ",".join(sample_paths_s3)
+        piperun_dict['umi'] = ','.join(chx_sample_df['umi'])
+        piperun_dict['adapter_sequence'] = ','.join(chx_sample_df['adaptor_sequence'])
+        piperun_dict['input_dir'] = params['input_dir'] + f'_{index}'
+        piperun_dict['output_dir'] = params['output_dir'] + f'_{index}'
+        
+        if row["TIS"] != '':
+            tis_samples = row["TIS"].split(';')
+            tis_sample_df = sample_df.loc[tis_samples]
+            tis_paths = tis_sample_df['containing_folder'] + tis_sample_df['R1_fastq_file'].to_list()
+            piperun_dict['umi_tis'] = ','.join(tis_sample_df['umi'])
+            piperun_dict['adapter_sequence_tis']: ','.join(tis_sample_df['adapter_sequence'])

@@ -21,6 +21,7 @@ setup(
         'six>=1.12.0',
         'configparser>=4.0.2',
         'click',
+        'boto3',
     ],
     entry_points = {
         'console_scripts': ['metaorf=metaorf.pipelines:main'],
