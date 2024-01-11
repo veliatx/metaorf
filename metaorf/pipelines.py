@@ -1,23 +1,25 @@
 '''Module containing pipeline entrypoints and definitions'''
 import click
-import subprocess
 
 from datetime import datetime
 from metaorf import utils, jobs
 
-
 @click.command()
-@click.argument('param_folder', type=str)
-def main(param_folder):
+@click.argument('sample_sheet', type=str)
+@click.option('--skip_orfcalling', default=False, help='Only run alignment tasks')
+def main(sample_sheet, skip_orfcalling):
     """
-    PARAM_FOLDER is a path to a folder containing all json parameter files
+    SAMPLE_SHEET is a conforming CSV file
     """
+
+    sample_df, jobs_df = utils.parse_samplesheet(sample_sheet)
+
     timestamp = datetime.today().strftime('%Y%m%d%H%M%S')
 
     default_params = {
         'orfcallers': 'ribocode',
         'multimap': 3,
-        'skip_orfcalling': False,
+        'skip_orfcalling': skip_orfcalling,
         'timestamp': timestamp,
         'input_dir': f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}',
         'output_dir': f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}',
@@ -32,22 +34,27 @@ def main(param_folder):
         'gene_names': 'genename_mapping.txt'
     }
 
-    for parameter_filename in param_folder.glob('*.json'):
-        experiment_name = parameter_filename.stem
-        parameter_filepath = param_folder.joinpath(parameter_filename)
+    piperun_dicts = utils.build_param_dicts(sample_df, jobs_df, default_params)
 
-        subprocess.run(utils.remove_folder(f's3://velia-piperuns-dev/{experiment_name}', is_on_s3=True))
+    for experiment_name, param_dict in piperun_dicts.items():
 
-        job_ids = []
-        job_list = [jobs.submit_cleaning_job,
-                    jobs.submit_data_preparation_job, 
-                    jobs.submit_data_preprocessing_job,
-                    jobs.submit_ribo_code_job,
-                    jobs.submit_data_upload_job, 
-                    jobs.submit_cleaning_job]
+        utils.create_piperun_folder(experiment_name, param_dict)
+
+        prev_job_ids = []
+        curr_job_ids = []
+        job_list = [jobs.PrepareData, 
+                    jobs.PreprocessData,
+                    (jobs.Ribocode, jobs.Price, jobs.RiboTish),
+                    jobs.UploadData]
 
         for job in job_list:
-            job_ids = job(experiment_name, parameter_filepath, dependencies=job_ids)
+            if len(job) > 1:
+                for subjob in job:
+                    curr_job_ids.append(subjob.submit(experiment_name, param_dict, dependencies=prev_job_ids))
+            else:
+                curr_job_ids = job.submit(experiment_name, param_dict, dependencies=prev_job_ids)
+                
+            prev_job_ids = curr_job_ids
 
-        utils.upload_parameter_file_to_s3(experiment_name, parameter_filepath)
+        #utils.upload_parameter_file_to_s3(experiment_name, parameter_filepath)
 

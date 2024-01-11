@@ -146,12 +146,14 @@ def parse_samplesheet(sample_csv_path):
     return sample_df, job_df
 
 
-def build_params_dict(sample_df, jobs_df, default_params):
-    """Constructs full pipeline run parameters dict"""
+def build_param_dicts(sample_df, jobs_df, default_params):
+    """Constructs full pipeline run parameter dictionaries"""
 
-    piperun_dict = default_params.copy()
+    piperun_dicts = {}
 
     for index, row in jobs_df.iterrows():
+
+        piperun_dict = default_params.copy()
         
         job_name = f"VPR_orfcalling_{default_params['timestamp']}"
         if default_params["skip_orfcalling"]:
@@ -177,4 +179,6 @@ def build_params_dict(sample_df, jobs_df, default_params):
             piperun_dict['umi_tis'] = ','.join(tis_sample_df['umi'])
             piperun_dict['adapter_sequence_tis']: ','.join(tis_sample_df['adapter_sequence'])
 
-    return piperun_dict
+        piperun_dicts[job_name] = piperun_dict
+
+    return piperun_dicts

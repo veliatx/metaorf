@@ -8,6 +8,66 @@ import subprocess
 from metaorf import utils
 
 
+class Job:
+    """
+    A class to represent an AWS Batch job.
+
+    Attributes:
+    -----------
+    experiment_name : str
+        A descriptive name for the pipeline run
+    parameter_dict : dict
+        All parameters for the full pipeline run containing this job
+    parameter_json : str
+        JSON representation of parameters for easy storage
+    parameter_uri : str
+        S3 URI for location of parameter JSON
+    piperun_uri : str
+        S3 URI for location of full pipeline run containing this job
+
+    Methods:
+    --------
+    submit():
+        Submits this job
+    stop():
+        Cancel or terminate job dependent on queue status
+
+    """
+
+    def __init__(self, experiment_name, parameter_dict, dependencies):
+        """
+        Constructs all the necessary attributes for the car object.
+
+        Parameters:
+        -----------
+        experiment_name : str
+            A descriptive name for the pipeline run
+        parameter_dict : dict
+            All parameters for the full pipeline run containing this job
+        dependencies : list(int)
+            All AWS Batch JobIDs that need to complete before this job can start
+
+        """
+        self.experiment_name = experiment_name
+        self.parameter_dict = parameter_dict
+        self.dependencies = dependencies
+
+
+    def submit(self):
+        """Submit job to AWS Batch"""
+        print("The engine started.")
+
+
+    def stop(self):
+        """Cancel or terminate job dependent on queue status """
+        # TODO
+        # boto3.client('batch', 'us-west-2').describe_job()
+        # if status == 'queue':
+        #    boto3.client('batch', 'us-west-2').cancel_job()
+        # else:
+        #    boto3.client('batch', 'us-west-2').terminate_job()
+
+
 def submit_list_job(experiment_name, parameter_filepath, dependencies):
     """Submits jobs to list the temporary folders on the AWS EFS drive."""
 
@@ -22,6 +82,8 @@ def submit_list_job(experiment_name, parameter_filepath, dependencies):
     )
     return [response['jobId']]
 
+
+class CleanDirectories(Job)
 
 def submit_cleaning_job(experiment_name, parameter_filepath, dependencies):
     """Submits jobs to clean up the temporary folders on the AWS EFS drive."""
