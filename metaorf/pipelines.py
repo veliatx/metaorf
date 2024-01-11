@@ -32,7 +32,6 @@ def main(param_folder):
         'gene_names': 'genename_mapping.txt'
     }
 
-
     for parameter_filename in param_folder.glob('*.json'):
         experiment_name = parameter_filename.stem
         parameter_filepath = param_folder.joinpath(parameter_filename)

@@ -1,15 +1,11 @@
 '''Module containing general utility functions'''
 
-import math
 import os
-import random
 import shlex
 import subprocess
 
 import numpy as np
 import pandas as pd
-
-from datetime import datetime
 
 
 def remove_folder(folder, is_on_s3=False):
@@ -150,13 +146,15 @@ def parse_samplesheet(sample_csv_path):
     return sample_df, job_df
 
 
-def build_json(sample_df, jobs_df, params):
-    """Reads parameters from a CSV file."""
+def build_params_dict(sample_df, jobs_df, default_params):
+    """Constructs full pipeline run parameters dict"""
+
+    piperun_dict = default_params.copy()
 
     for index, row in jobs_df.iterrows():
         
-        job_name = f"VPR_orfcalling_{params['timestamp']}"
-        if params["skip_orfcalling"]:
+        job_name = f"VPR_orfcalling_{default_params['timestamp']}"
+        if default_params["skip_orfcalling"]:
             job_name += "_mapping_only"
         
         chx_samples = row["CHX"].split(';')
@@ -169,8 +167,8 @@ def build_json(sample_df, jobs_df, params):
         piperun_dict['sample_paths_s3'] = ",".join(sample_paths_s3)
         piperun_dict['umi'] = ','.join(chx_sample_df['umi'])
         piperun_dict['adapter_sequence'] = ','.join(chx_sample_df['adaptor_sequence'])
-        piperun_dict['input_dir'] = params['input_dir'] + f'_{index}'
-        piperun_dict['output_dir'] = params['output_dir'] + f'_{index}'
+        piperun_dict['input_dir'] = default_params['input_dir'] + f'_{index}'
+        piperun_dict['output_dir'] = default_params['output_dir'] + f'_{index}'
         
         if row["TIS"] != '':
             tis_samples = row["TIS"].split(';')
@@ -178,3 +176,5 @@ def build_json(sample_df, jobs_df, params):
             tis_paths = tis_sample_df['containing_folder'] + tis_sample_df['R1_fastq_file'].to_list()
             piperun_dict['umi_tis'] = ','.join(tis_sample_df['umi'])
             piperun_dict['adapter_sequence_tis']: ','.join(tis_sample_df['adapter_sequence'])
+
+    return piperun_dict

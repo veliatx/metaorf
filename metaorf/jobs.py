@@ -9,7 +9,7 @@ from metaorf import utils
 
 
 def submit_list_job(experiment_name, parameter_filepath, dependencies):
-    """Submits jobs to clean up the temporary folders on the AWS EFS drive."""
+    """Submits jobs to list the temporary folders on the AWS EFS drive."""
 
     response = boto3.client('batch', 'us-west-2').submit_job(
         jobName=f'{experiment_name}_list',
@@ -36,7 +36,7 @@ def submit_cleaning_job(experiment_name, parameter_filepath, dependencies):
     job_id_list = []
     for command in command_list:
         response = boto3.client('batch', 'us-west-2').submit_job(
-            jobName=f'{experiment_name}_clearning',
+            jobName=f'{experiment_name}_cleaning',
             jobQueue='bfx-jq-general',
             jobDefinition='arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:3',
             containerOverrides = {
