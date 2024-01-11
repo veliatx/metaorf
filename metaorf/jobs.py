@@ -8,6 +8,41 @@ import subprocess
 from metaorf import utils
 
 
+class PipelineRun:
+    """"""
+    
+    
+    def __init__(self, experiment_name, parameter_dict, dependencies):
+        """
+        Constructs all the necessary attributes for the Job object.
+
+        Parameters:
+        -----------
+        experiment_name : str
+            A descriptive name for the pipeline run
+        parameter_dict : dict
+            All parameters for the full pipeline run containing this job
+        dependencies : list(int)
+            All AWS Batch JobIDs that need to complete before this job can start
+
+        """
+        self.experiment_name = experiment_name
+        self.parameter_dict = parameter_dict
+        self.dependencies = dependencies
+    
+    def create_directories(self):
+        """Create S3 and EFS tmp directories"""
+        pass
+
+
+    def upload_results(self):
+        """Upload final results from EFS to S3"""
+        pass
+
+
+    def cleanup(self):
+        """Remove temporary EFS directories"""
+
 class Job:
     """
     A class to represent an AWS Batch job.
@@ -36,7 +71,7 @@ class Job:
 
     def __init__(self, experiment_name, parameter_dict, dependencies):
         """
-        Constructs all the necessary attributes for the car object.
+        Constructs all the necessary attributes for the Job object.
 
         Parameters:
         -----------
@@ -53,9 +88,7 @@ class Job:
         self.dependencies = dependencies
 
 
-    def submit(self):
-        """Submit job to AWS Batch"""
-        print("The engine started.")
+    
 
 
     def stop(self):
@@ -66,6 +99,48 @@ class Job:
         #    boto3.client('batch', 'us-west-2').cancel_job()
         # else:
         #    boto3.client('batch', 'us-west-2').terminate_job()
+
+
+class PrepareData(Job):
+    """
+    A class to represent a data preparation job.
+
+    Attributes:
+    -----------
+    Inherits all attributes from the Job class.
+
+    Methods:
+    --------
+    Inherits start() and stop() methods from the Car class.
+    charge():
+        Charges the car's battery.
+    """
+
+    def __init__(self, make, model, year, color, battery_size):
+        """
+        Constructs all the necessary attributes for the electric car object.
+
+        Inherits make, model, year, and color from the Car class and adds battery_size.
+
+        Parameters:
+        -----------
+        make : str
+            The make of the car (e.g., Tesla, Nissan).
+        model : str
+            The model of the car (e.g., Model S, Leaf).
+        year : int
+            The year the car was made.
+        color : str
+            The color of the car.
+        battery_size : int
+            The size of the car's battery in kWh.
+        """
+        super().__init__(make, model, year, color)  # Initialize attributes from the parent class
+        self.battery_size = battery_size
+
+    def charge(self):
+        """Charges the car's battery."""
+        print("The car is charging.")
 
 
 def submit_list_job(experiment_name, parameter_filepath, dependencies):
@@ -82,8 +157,6 @@ def submit_list_job(experiment_name, parameter_filepath, dependencies):
     )
     return [response['jobId']]
 
-
-class CleanDirectories(Job)
 
 def submit_cleaning_job(experiment_name, parameter_filepath, dependencies):
     """Submits jobs to clean up the temporary folders on the AWS EFS drive."""
