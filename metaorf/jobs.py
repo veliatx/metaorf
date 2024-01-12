@@ -8,41 +8,6 @@ import subprocess
 from metaorf import utils
 
 
-class PipelineRun:
-    """"""
-    
-    
-    def __init__(self, experiment_name, parameter_dict, dependencies):
-        """
-        Constructs all the necessary attributes for the Job object.
-
-        Parameters:
-        -----------
-        experiment_name : str
-            A descriptive name for the pipeline run
-        parameter_dict : dict
-            All parameters for the full pipeline run containing this job
-        dependencies : list(int)
-            All AWS Batch JobIDs that need to complete before this job can start
-
-        """
-        self.experiment_name = experiment_name
-        self.parameter_dict = parameter_dict
-        self.dependencies = dependencies
-    
-    def create_directories(self):
-        """Create S3 and EFS tmp directories"""
-        pass
-
-
-    def upload_results(self):
-        """Upload final results from EFS to S3"""
-        pass
-
-
-    def cleanup(self):
-        """Remove temporary EFS directories"""
-
 class Job:
     """
     A class to represent an AWS Batch job.
@@ -50,11 +15,9 @@ class Job:
     Attributes:
     -----------
     experiment_name : str
-        A descriptive name for the pipeline run
+        A descriptive name for the pipeline run this job is a part of
     parameter_dict : dict
         All parameters for the full pipeline run containing this job
-    parameter_json : str
-        JSON representation of parameters for easy storage
     parameter_uri : str
         S3 URI for location of parameter JSON
     piperun_uri : str
@@ -69,26 +32,44 @@ class Job:
 
     """
 
-    def __init__(self, experiment_name, parameter_dict, dependencies):
+    def __init__(self, job_name, parameter_dict, dependencies, command_list):
         """
-        Constructs all the necessary attributes for the Job object.
 
         Parameters:
         -----------
-        experiment_name : str
+        job_name : str
             A descriptive name for the pipeline run
         parameter_dict : dict
             All parameters for the full pipeline run containing this job
         dependencies : list(int)
             All AWS Batch JobIDs that need to complete before this job can start
+        command_list : list(str)
+            Shell compatible list of commands to be run
 
         """
-        self.experiment_name = experiment_name
+        self.job_name = job_name
         self.parameter_dict = parameter_dict
         self.dependencies = dependencies
+        self.command_list = command_list
+        
+        self.experiment_name = parameter_dict['experiment_name']
 
+    def submit(self):
+        """"""
+        job_id_list = []
+        for command in self.command_list:
+            response = boto3.client('batch', 'us-west-2').submit_job(
+                jobName=f'{self.experiment_name}_{self.job_name}',
+                jobQueue='bfx-jq-general',
+                jobDefinition='arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:3',
+                containerOverrides = {
+                    'command': command,
+                },
+                dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in self.dependencies],
+            )
+            job_id_list.append(response['jobId'])
 
-    
+        return job_id_list
 
 
     def stop(self):
@@ -103,44 +84,102 @@ class Job:
 
 class PrepareData(Job):
     """
-    A class to represent a data preparation job.
-
-    Attributes:
-    -----------
-    Inherits all attributes from the Job class.
-
-    Methods:
-    --------
-    Inherits start() and stop() methods from the Car class.
-    charge():
-        Charges the car's battery.
+    A class to facilitate data preparation.
     """
 
-    def __init__(self, make, model, year, color, battery_size):
-        """
-        Constructs all the necessary attributes for the electric car object.
+    def __init__(self, params, dependencies):
+                
+        riboseq_filepaths_s3 = params['sample_paths_s3'].split(",") 
+        if 'tis_paths' in params:
+            riboseq_filepaths_s3 += params['tis_paths'].split(",")
+        command_list = utils.collect_input_data_for_orfrater(
+            riboseq_filepaths_s3, params['input_dir'])
 
-        Inherits make, model, year, and color from the Car class and adds battery_size.
+        super().__init__('data_prep', params, dependencies, command_list)
 
-        Parameters:
-        -----------
-        make : str
-            The make of the car (e.g., Tesla, Nissan).
-        model : str
-            The model of the car (e.g., Model S, Leaf).
-        year : int
-            The year the car was made.
-        color : str
-            The color of the car.
-        battery_size : int
-            The size of the car's battery in kWh.
-        """
-        super().__init__(make, model, year, color)  # Initialize attributes from the parent class
-        self.battery_size = battery_size
 
-    def charge(self):
-        """Charges the car's battery."""
-        print("The car is charging.")
+class PreprocessData(Job):
+    """
+    A class to facilitate preprocessing job.
+    """
+
+    def __init__(self, params, dependencies):
+
+        job_name = 'data_preprocessing'
+        params.update({
+            'jobName': f'{params["experiment_name"]}_{job_name}',
+            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:3',
+        })
+
+        riboseq_filenames = [os.path.basename(riboseq)
+                            for riboseq in params['sample_paths_s3'].split(",")]
+        data_prep_cmd = [
+            'python3', 'src/main_run_data_prep.py',
+            '--experiment_name', params['experiment_name'],
+            '--annotation_dir', params['annotation_dir'],
+            '--input_dir', params['input_dir'],
+            '--output_dir', params['output_dir'],
+            '--contaminant_genomes', params['contaminant_genomes'],
+            '--reference_genomes', params['reference_genomes'],
+            '--genome_annotation_prefix', params['genome_annotation_prefix'],
+            '--contaminant_genome_index', params['contaminant_genome_index'],
+            '--reference_genome_index', params['reference_genome_index']]
+        
+        # CHX
+        if riboseq_filenames[0].endswith("fastq.gz") or riboseq_filenames[0].endswith("fastq"):
+            data_prep_cmd += ['--samples', ','.join(riboseq_filenames)]
+            if 'umi' in params and params['umi']:
+                data_prep_cmd += ['--umi_pattern', params['umi']]
+            if 'adapter_sequence' in params and params['adapter_sequence']:
+                data_prep_cmd += ['--adapter_sequence', params['adapter_sequence']]
+        elif riboseq_filenames[0].endswith("bam"):
+            data_prep_cmd += ['--sample_bam_files', ','.join(riboseq_filenames)]
+        else:
+            exit(f'Unexpected type of input {riboseq_filenames[0]}')
+            
+        # TIS
+        if 'tis_paths' in params:
+            tis_filenames = [os.path.basename(riboseq)
+                            for riboseq in params['tis_paths'].split(",")]
+            if tis_filenames[0].endswith("fastq.gz") or tis_filenames[0].endswith("fastq"):
+                data_prep_cmd += ['--fastq_tis_files', ','.join(tis_filenames)]
+                if 'umi_pattern_tis' in params and params['umi_pattern_tis']:
+                    data_prep_cmd += ['--umi_pattern_tis', params['umi_pattern_tis']]
+                if 'adapter_sequence_tis' in params and params['adapter_sequence_tis']:
+                    data_prep_cmd += ['--adapter_sequence_tis', params['adapter_sequence_tis']]
+            elif tis_filenames[0].endswith("bam"):
+                data_prep_cmd += ['--bam_tis_files', ','.join(tis_filenames)]
+            else:
+                exit(f'Unexpected type of input {tis_filenames[0]}')
+
+        if 'multimap' in params:
+            data_prep_cmd += ['--multimap', params['multimap']]
+
+        super().__init__('data_preprocessing', params, dependencies, [data_prep_cmd])
+
+
+class Ribocode(Job):
+    """
+    A class to represent a ribocode job.
+    """
+
+    def __init__(self, params, dependencies):
+
+        params.update({
+            'jobName': f'{params["experiment_name"]}_ribocode',
+            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribocode:2',
+        })
+
+        command_list = [
+            'python3', 'src/main_run_ribocode.py',
+            '--experiment_name', params['experiment_name'],
+            '--annotation_dir', params['annotation_dir'],
+            '--output_dir', params['output_dir'],
+            '--reference_genomes', params['reference_genomes'],
+            '--genome_annotation_prefix', params['genome_annotation_prefix'],]
+    
+        super().__init__('data_prep', params, dependencies, command_list)
+
 
 
 def submit_list_job(experiment_name, parameter_filepath, dependencies):

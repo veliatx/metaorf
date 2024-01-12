@@ -4,14 +4,10 @@ import click
 from datetime import datetime
 from metaorf import utils, jobs
 
-@click.command()
-@click.argument('sample_sheet', type=str)
-@click.option('--skip_orfcalling', default=False, help='Only run alignment tasks')
-def main(sample_sheet, skip_orfcalling):
-    """
-    SAMPLE_SHEET is a conforming CSV file
-    """
 
+def define_jobs(sample_sheet, params):
+    """
+    """
     sample_df, jobs_df = utils.parse_samplesheet(sample_sheet)
 
     timestamp = datetime.today().strftime('%Y%m%d%H%M%S')
@@ -19,7 +15,7 @@ def main(sample_sheet, skip_orfcalling):
     default_params = {
         'orfcallers': 'ribocode',
         'multimap': 3,
-        'skip_orfcalling': skip_orfcalling,
+        'skip_orfcalling': False,
         'timestamp': timestamp,
         'input_dir': f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}',
         'output_dir': f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}',
@@ -34,27 +30,50 @@ def main(sample_sheet, skip_orfcalling):
         'gene_names': 'genename_mapping.txt'
     }
 
-    piperun_dicts = utils.build_param_dicts(sample_df, jobs_df, default_params)
+    params = default_params.update(params)
+
+    return sample_df, jobs_df, params
+
+
+def submit_jobs(experiment_name, param_dict, job_list):
+    """
+    """
+    utils.create_piperun_folders(experiment_name, param_dict)
+
+    prev_job_ids = []
+    curr_job_ids = []
+
+    for job in job_list:
+        if len(job) > 1:
+            for subjob in job:
+                curr_job_ids.append(subjob.submit(experiment_name, param_dict, dependencies=prev_job_ids))
+        else:
+            curr_job_ids = job.submit(experiment_name, param_dict, dependencies=prev_job_ids)
+            
+        prev_job_ids = curr_job_ids
+        curr_job_ids = []
+
+
+@click.command()
+@click.argument('sample_sheet', type=str)
+@click.option('--skip_orfcalling', default=False, help='Only run alignment tasks')
+def main(sample_sheet, skip_orfcalling):
+    """
+    SAMPLE_SHEET is a conforming CSV file
+    """
+
+    options = {"skip_orfcalling": skip_orfcalling}
+    sample_df, jobs_df, params = define_jobs(sample_sheet, options)
+    piperun_dicts = utils.build_param_dicts(sample_df, jobs_df, params)
 
     for experiment_name, param_dict in piperun_dicts.items():
 
-        utils.create_piperun_folder(experiment_name, param_dict)
-
-        prev_job_ids = []
-        curr_job_ids = []
         job_list = [jobs.PrepareData, 
                     jobs.PreprocessData,
                     (jobs.Ribocode, jobs.Price, jobs.RiboTish),
-                    jobs.UploadData]
+                    jobs.UploadData,
+                    jobs.CleanDirectories]
 
-        for job in job_list:
-            if len(job) > 1:
-                for subjob in job:
-                    curr_job_ids.append(subjob.submit(experiment_name, param_dict, dependencies=prev_job_ids))
-            else:
-                curr_job_ids = job.submit(experiment_name, param_dict, dependencies=prev_job_ids)
-                
-            prev_job_ids = curr_job_ids
+        submit_jobs(experiment_name, param_dict, job_list)
 
-        #utils.upload_parameter_file_to_s3(experiment_name, parameter_filepath)
 
