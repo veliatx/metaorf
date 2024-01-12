@@ -1,11 +1,10 @@
 '''Module containing job definitions'''
 import boto3
-import click
 import json
 import os
-import subprocess
 
 from metaorf import utils
+from pathlib import Path
 
 
 class Job:
@@ -108,7 +107,7 @@ class PreprocessData(Job):
         job_name = 'data_preprocessing'
         params.update({
             'jobName': f'{params["experiment_name"]}_{job_name}',
-            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:3',
+            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4',
         })
 
         riboseq_filenames = [os.path.basename(riboseq)
@@ -181,6 +180,85 @@ class Ribocode(Job):
         super().__init__('data_prep', params, dependencies, command_list)
 
 
+class RiboTish(Job):
+    """
+    A class to represent a ribotish job.
+    """
+
+    def __init__(self, params, dependencies):
+
+        params.update({
+            'jobName': f'{params["experiment_name"]}_ribotish',
+            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribotish:1',
+        })
+
+        orf_calling_cmd = [
+            'python3', 'src/main_run_ribotish.py',
+            '--experiment_name', params['experiment_name'],
+            '--annotation_dir', params['annotation_dir'],
+            '--output_dir', params['output_dir'],
+            '--reference_genomes', params['reference_genomes'],
+            '--genome_annotation_prefix', params['genome_annotation_prefix'],]
+    
+        super().__init__('data_prep', params, dependencies, [orf_calling_cmd])
+
+
+class UploadData(Job):
+    """
+    A class to facilitate data upload to S3 upon job completion.
+    """
+
+    def __init__(self, params, dependencies):
+
+        job_name = 'data_upload'
+
+        params.update({
+            'jobName': f'{params["experiment_name"]}_{job_name}',
+            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4',
+        })
+
+        command_list = []
+        
+        command_list.append(
+            utils.copy_folder_to_or_from_s3(
+                src_folder=params['input_dir'],
+                des_folder= Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'input')))
+        
+        command_list.append(
+            utils.copy_folder_to_or_from_s3(
+                src_folder=params['output_dir'],
+                des_folder=Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'output')))
+            
+        super().__init__(job_name, params, dependencies, command_list)
+
+
+class CleanDirectories(Job):
+    """
+    A class to facilitate data upload to S3 upon job completion.
+    """
+
+    def __init__(self, params, dependencies):
+
+        job_name = 'data_upload'
+
+        params.update({
+            'jobName': f'{params["experiment_name"]}_{job_name}',
+            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4',
+        })
+
+        command_list = []
+        
+        command_list.append(
+            utils.copy_folder_to_or_from_s3(
+                src_folder=params['input_dir'],
+                des_folder= Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'input')))
+        
+        command_list.append(
+            utils.copy_folder_to_or_from_s3(
+                src_folder=params['output_dir'],
+                des_folder=Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'output')))
+            
+        super().__init__(job_name, params, dependencies, command_list)
 
 def submit_list_job(experiment_name, parameter_filepath, dependencies):
     """Submits jobs to list the temporary folders on the AWS EFS drive."""
@@ -232,7 +310,7 @@ def submit_s3_cleaning_job(experiment_name, parameter_filepath, dependencies):
     job_id_list = []
     for command in command_list:
         response = boto3.client('batch', 'us-west-2').submit_job(
-            jobName=f'{experiment_name}_clearning',
+            jobName=f'{experiment_name}_cleaning',
             jobQueue='bfx-jq-general',
             jobDefinition='arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:3',
             containerOverrides = {

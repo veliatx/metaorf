@@ -70,7 +70,8 @@ def main(sample_sheet, skip_orfcalling):
 
         job_list = [jobs.PrepareData, 
                     jobs.PreprocessData,
-                    (jobs.Ribocode, jobs.Price, jobs.RiboTish),
+                    (jobs.Ribocode, jobs.RiboTish),
+                    #(jobs.Ribocode, jobs.Price, jobs.RiboTish),
                     jobs.UploadData,
                     jobs.CleanDirectories]
 
