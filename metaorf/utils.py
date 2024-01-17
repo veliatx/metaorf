@@ -116,6 +116,20 @@ def process_data_frame(df):
 
 def parse_samplesheet(sample_csv_path):
     """
+    Parse CSV samplesheet to extract samples and jobs dataframes
+    
+    Parameters:
+    -----------
+    sample_csv_path : str
+        Absolute path to a CSV sample sheet file
+
+    Returns:
+    --------
+    sample_df: pandas.DataFrame
+        Table representing sample information
+    job_df:
+        Table representing job information
+
     """
     sample_df = pd.DataFrame()
     job_df = pd.DataFrame()

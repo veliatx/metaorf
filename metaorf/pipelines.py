@@ -7,6 +7,24 @@ from metaorf import utils, jobs
 
 def define_jobs(sample_sheet, params):
     """
+    Setup job definition params 
+
+    Parameters:
+    -----------
+    sample_sheet : str
+        Absolute path to a CSV sample sheet file
+    params : dict
+        Any non-default parameters for pipeline run
+
+    Returns:
+    --------
+    sample_df: pandas.DataFrame
+        Table representing sample information
+    job_df: pandas.DataFrame
+        Table representing job information
+    params: dict
+        All parameters for pipeline run
+
     """
     sample_df, jobs_df = utils.parse_samplesheet(sample_sheet)
 
@@ -27,7 +45,8 @@ def define_jobs(sample_sheet, params):
         'reference_genome_index': 'star',
         'transcriptome_bed_file': 'veliadb_v1.bed',
         'pseudogenes': 'transcript_ids_on_pseudogenes.txt',
-        'gene_names': 'genename_mapping.txt'
+        'gene_names': 'genename_mapping.txt',
+        'jobQueue': 'bfx-jq-general'
     }
 
     params = default_params.update(params)
@@ -35,10 +54,21 @@ def define_jobs(sample_sheet, params):
     return sample_df, jobs_df, params
 
 
-def submit_jobs(experiment_name, param_dict, job_list):
+def submit_jobs(experiment_name, params, job_list):
     """
+    Submit batch jobs
+
+    Parameters:
+    -----------
+    experiment_name : str
+        Absolute path to a CSV sample sheet file
+    params : dict
+        All parameters for pipeline run
+    job_list: list
+        List of jobs to run in DAG format
+
     """
-    utils.create_piperun_folders(experiment_name, param_dict)
+    utils.create_piperun_folders(experiment_name, params)
 
     prev_job_ids = []
     curr_job_ids = []
@@ -46,9 +76,9 @@ def submit_jobs(experiment_name, param_dict, job_list):
     for job in job_list:
         if len(job) > 1:
             for subjob in job:
-                curr_job_ids.append(subjob.submit(experiment_name, param_dict, dependencies=prev_job_ids))
+                curr_job_ids.append(subjob.submit(experiment_name, params, dependencies=prev_job_ids))
         else:
-            curr_job_ids = job.submit(experiment_name, param_dict, dependencies=prev_job_ids)
+            curr_job_ids = job.submit(experiment_name, params, dependencies=prev_job_ids)
             
         prev_job_ids = curr_job_ids
         curr_job_ids = []
@@ -61,7 +91,6 @@ def main(sample_sheet, skip_orfcalling):
     """
     SAMPLE_SHEET is a conforming CSV file
     """
-
     options = {"skip_orfcalling": skip_orfcalling}
     sample_df, jobs_df, params = define_jobs(sample_sheet, options)
     piperun_dicts = utils.build_param_dicts(sample_df, jobs_df, params)

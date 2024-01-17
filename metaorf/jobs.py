@@ -31,7 +31,7 @@ class Job:
 
     """
 
-    def __init__(self, job_name, parameter_dict, dependencies, command_list):
+    def __init__(self, job_name, params, dependencies, command_list):
         """
 
         Parameters:
@@ -47,20 +47,22 @@ class Job:
 
         """
         self.job_name = job_name
-        self.parameter_dict = parameter_dict
+        self.params = params
         self.dependencies = dependencies
         self.command_list = command_list
         
-        self.experiment_name = parameter_dict['experiment_name']
+        self.experiment_name = params['experiment_name']
+        self.job_queue = params['jobQueue']
+        self.job_definition = params['jobDefinition']
 
     def submit(self):
         """"""
         job_id_list = []
         for command in self.command_list:
             response = boto3.client('batch', 'us-west-2').submit_job(
-                jobName=f'{self.experiment_name}_{self.job_name}',
-                jobQueue='bfx-jq-general',
-                jobDefinition='arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:3',
+                jobName = f'{self.experiment_name}_{self.job_name}',
+                jobQueue = self.job_queue,
+                jobDefinition = self.job_definition,
                 containerOverrides = {
                     'command': command,
                 },
@@ -105,10 +107,8 @@ class PreprocessData(Job):
     def __init__(self, params, dependencies):
 
         job_name = 'data_preprocessing'
-        params.update({
-            'jobName': f'{params["experiment_name"]}_{job_name}',
-            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4',
-        })
+        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         riboseq_filenames = [os.path.basename(riboseq)
                             for riboseq in params['sample_paths_s3'].split(",")]
@@ -159,15 +159,14 @@ class PreprocessData(Job):
 
 class Ribocode(Job):
     """
-    A class to represent a ribocode job.
+    A class to represent a RiboCode job.
     """
 
     def __init__(self, params, dependencies):
 
-        params.update({
-            'jobName': f'{params["experiment_name"]}_ribocode',
-            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribocode:2',
-        })
+        job_name = 'ribocode'
+        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribocode:2'
 
         command_list = [
             'python3', 'src/main_run_ribocode.py',
@@ -182,15 +181,14 @@ class Ribocode(Job):
 
 class RiboTish(Job):
     """
-    A class to represent a ribotish job.
+    A class to represent a Ribo-TISH job.
     """
 
     def __init__(self, params, dependencies):
 
-        params.update({
-            'jobName': f'{params["experiment_name"]}_ribotish',
-            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribotish:1',
-        })
+        job_name = 'ribotish'
+        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribotish:1'
 
         orf_calling_cmd = [
             'python3', 'src/main_run_ribotish.py',
@@ -211,11 +209,8 @@ class UploadData(Job):
     def __init__(self, params, dependencies):
 
         job_name = 'data_upload'
-
-        params.update({
-            'jobName': f'{params["experiment_name"]}_{job_name}',
-            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4',
-        })
+        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         command_list = []
         
@@ -240,11 +235,8 @@ class CleanDirectories(Job):
     def __init__(self, params, dependencies):
 
         job_name = 'data_upload'
-
-        params.update({
-            'jobName': f'{params["experiment_name"]}_{job_name}',
-            'jobDefinition': 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4',
-        })
+        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         command_list = []
         
@@ -259,6 +251,7 @@ class CleanDirectories(Job):
                 des_folder=Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'output')))
             
         super().__init__(job_name, params, dependencies, command_list)
+
 
 def submit_list_job(experiment_name, parameter_filepath, dependencies):
     """Submits jobs to list the temporary folders on the AWS EFS drive."""
