@@ -1,5 +1,5 @@
 '''Module containing general utility functions'''
-
+import boto3
 import os
 import shlex
 import subprocess
@@ -8,47 +8,32 @@ import numpy as np
 import pandas as pd
 
 
+def create_piperun_folders(experiment_name, params):
+    """
+    Create S3 directory for piperun output
+
+    Parameters:
+    -----------
+    experiment_name: str
+        Name of job being run
+    params: dict
+        All parameters for pipeline run
+
+    """
+    s3 = boto3.client('s3')
+
+    input_path = f'{experiment_name}/input/'
+    output_path = f'{experiment_name}/output/'
+
+    s3.put_object(Bucket=params['bucket_name'], Key=input_path)
+    s3.put_object(Bucket=params['bucket_name'], Key=output_path)
+
+
 def remove_folder(folder, is_on_s3=False):
     if is_on_s3:
         cmd = f'aws s3 rm --recursive {folder}'
     else:
         cmd = f'rm -rf {folder}'
-    return cmd.split()
-
-
-def download_gencode_and_chess(data_folder):
-    """Deprecated."""
-    des_folder = os.path.join(data_folder, 'hg38_CHESS_supplemented_GENCODE')
-    cmd = (f'aws s3 cp --recursive '
-           f's3://velia-annotation-dev/hg38_CHESS_supplemented_GENCODE/ '
-           f'{des_folder} ')
-    return cmd.split()
-
-    
-def download_contaminant_fasta(data_folder):
-    """Deprecated."""
-    des_folder = os.path.join(data_folder, 'contaminant')
-    cmd = (f'aws s3 cp --recursive '
-           f's3://velia-annotation-dev/contaminant_fasta/ '
-           f'{des_folder} ')
-    return cmd.split()
-    
-
-def download_gene_names(data_folder):
-    """Deprecated."""
-    des_folder = os.path.join(data_folder, 'gene_names')
-    cmd = (f'aws s3 cp --recursive '
-           f's3://velia-annotation-dev/gene_names/ '
-           f'{des_folder} ')
-    return cmd.split()
-    
-
-def download_genomes(data_folder, genome_name):
-    """Deprecated."""
-    des_file = os.path.join(data_folder, 'genomes', genome_name)
-    cmd = (f'aws s3 cp '
-           f's3://velia-annotation-dev/genomes/{genome_name} '
-           f'{des_file} ')
     return cmd.split()
     
     
@@ -120,7 +105,7 @@ def parse_samplesheet(sample_csv_path):
     
     Parameters:
     -----------
-    sample_csv_path : str
+    sample_csv_path : pathlib.Path
         Absolute path to a CSV sample sheet file
 
     Returns:
@@ -160,17 +145,33 @@ def parse_samplesheet(sample_csv_path):
     return sample_df, job_df
 
 
-def build_param_dicts(sample_df, jobs_df, default_params):
-    """Constructs full pipeline run parameter dictionaries"""
+def build_param_dicts(sample_df, jobs_df, params):
+    """
+    Build a dictionary of parameter dictionaries, one for each individual job
+    
+    Parameters:
+    -----------
+    sample_df: pandas.DataFrame
+        Table representing sample information
+    job_df: pandas.DataFrame
+        Table representing job information
+    params: dict
+        All parameters for pipeline run
 
+    Returns:
+    --------
+    piperun_dicts: dict
+        Map of experiment_name -> parameter dictionary
+
+    """
     piperun_dicts = {}
 
     for index, row in jobs_df.iterrows():
 
-        piperun_dict = default_params.copy()
+        piperun_dict = params.copy()
         
-        job_name = f"VPR_orfcalling_{default_params['timestamp']}"
-        if default_params["skip_orfcalling"]:
+        job_name = f"VPR_orfcalling_{params['timestamp']}"
+        if params["skip_orfcalling"]:
             job_name += "_mapping_only"
         
         chx_samples = row["CHX"].split(';')
@@ -183,8 +184,8 @@ def build_param_dicts(sample_df, jobs_df, default_params):
         piperun_dict['sample_paths_s3'] = ",".join(sample_paths_s3)
         piperun_dict['umi'] = ','.join(chx_sample_df['umi'])
         piperun_dict['adapter_sequence'] = ','.join(chx_sample_df['adaptor_sequence'])
-        piperun_dict['input_dir'] = default_params['input_dir'] + f'_{index}'
-        piperun_dict['output_dir'] = default_params['output_dir'] + f'_{index}'
+        piperun_dict['input_dir'] = params['input_dir'] + f'_{index}'
+        piperun_dict['output_dir'] = params['output_dir'] + f'_{index}'
         
         if row["TIS"] != '':
             tis_samples = row["TIS"].split(';')

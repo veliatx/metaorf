@@ -31,34 +31,35 @@ class Job:
 
     """
 
-    def __init__(self, job_name, params, dependencies, command_list):
+    def __init__(self, job_name, experiment_name, params, command_list):
         """
 
         Parameters:
         -----------
         job_name : str
             A descriptive name for the pipeline run
-        parameter_dict : dict
+        experiment_name : str
+            A descriptive name for the pipeline run this job is a part of
+        params : dict
             All parameters for the full pipeline run containing this job
-        dependencies : list(int)
-            All AWS Batch JobIDs that need to complete before this job can start
         command_list : list(str)
             Shell compatible list of commands to be run
 
         """
         self.job_name = job_name
+        self.experiment_name = experiment_name
         self.params = params
-        self.dependencies = dependencies
         self.command_list = command_list
         
-        self.experiment_name = params['experiment_name']
         self.job_queue = params['jobQueue']
         self.job_definition = params['jobDefinition']
 
-    def submit(self):
+
+    def submit(self, dependencies):
         """"""
         job_id_list = []
         for command in self.command_list:
+            command = [str(c) for c in command]
             response = boto3.client('batch', 'us-west-2').submit_job(
                 jobName = f'{self.experiment_name}_{self.job_name}',
                 jobQueue = self.job_queue,
@@ -66,7 +67,7 @@ class Job:
                 containerOverrides = {
                     'command': command,
                 },
-                dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in self.dependencies],
+                dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in dependencies],
             )
             job_id_list.append(response['jobId'])
 
@@ -88,15 +89,19 @@ class PrepareData(Job):
     A class to facilitate data preparation.
     """
 
-    def __init__(self, params, dependencies):
-                
+    def __init__(self, experiment_name, params):
+
+        job_name = 'data_prep'
+        params['jobName'] = f'{experiment_name}_{job_name}'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
+
         riboseq_filepaths_s3 = params['sample_paths_s3'].split(",") 
         if 'tis_paths' in params:
             riboseq_filepaths_s3 += params['tis_paths'].split(",")
         command_list = utils.collect_input_data_for_orfrater(
             riboseq_filepaths_s3, params['input_dir'])
 
-        super().__init__('data_prep', params, dependencies, command_list)
+        super().__init__('data_prep', experiment_name, params, command_list)
 
 
 class PreprocessData(Job):
@@ -104,17 +109,17 @@ class PreprocessData(Job):
     A class to facilitate preprocessing job.
     """
 
-    def __init__(self, params, dependencies):
+    def __init__(self, experiment_name, params):
 
         job_name = 'data_preprocessing'
-        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobName'] = f'{experiment_name}_{job_name}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         riboseq_filenames = [os.path.basename(riboseq)
                             for riboseq in params['sample_paths_s3'].split(",")]
         data_prep_cmd = [
             'python3', 'src/main_run_data_prep.py',
-            '--experiment_name', params['experiment_name'],
+            '--experiment_name', experiment_name,
             '--annotation_dir', params['annotation_dir'],
             '--input_dir', params['input_dir'],
             '--output_dir', params['output_dir'],
@@ -154,7 +159,7 @@ class PreprocessData(Job):
         if 'multimap' in params:
             data_prep_cmd += ['--multimap', params['multimap']]
 
-        super().__init__('data_preprocessing', params, dependencies, [data_prep_cmd])
+        super().__init__('data_preprocessing', experiment_name, params, [data_prep_cmd])
 
 
 class Ribocode(Job):
@@ -162,21 +167,21 @@ class Ribocode(Job):
     A class to represent a RiboCode job.
     """
 
-    def __init__(self, params, dependencies):
+    def __init__(self, experiment_name, params):
 
         job_name = 'ribocode'
-        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobName'] = f'{experiment_name}_{job_name}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribocode:2'
 
         command_list = [
             'python3', 'src/main_run_ribocode.py',
-            '--experiment_name', params['experiment_name'],
+            '--experiment_name', experiment_name,
             '--annotation_dir', params['annotation_dir'],
             '--output_dir', params['output_dir'],
             '--reference_genomes', params['reference_genomes'],
             '--genome_annotation_prefix', params['genome_annotation_prefix'],]
     
-        super().__init__('data_prep', params, dependencies, command_list)
+        super().__init__('data_prep', experiment_name, params, command_list)
 
 
 class RiboTish(Job):
@@ -184,21 +189,21 @@ class RiboTish(Job):
     A class to represent a Ribo-TISH job.
     """
 
-    def __init__(self, params, dependencies):
+    def __init__(self, experiment_name, params):
 
         job_name = 'ribotish'
-        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobName'] = f'{experiment_name}_{job_name}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribotish:1'
 
         orf_calling_cmd = [
             'python3', 'src/main_run_ribotish.py',
-            '--experiment_name', params['experiment_name'],
+            '--experiment_name', experiment_name,
             '--annotation_dir', params['annotation_dir'],
             '--output_dir', params['output_dir'],
             '--reference_genomes', params['reference_genomes'],
             '--genome_annotation_prefix', params['genome_annotation_prefix'],]
     
-        super().__init__('data_prep', params, dependencies, [orf_calling_cmd])
+        super().__init__('data_prep', experiment_name, params, [orf_calling_cmd])
 
 
 class UploadData(Job):
@@ -206,25 +211,25 @@ class UploadData(Job):
     A class to facilitate data upload to S3 upon job completion.
     """
 
-    def __init__(self, params, dependencies):
+    def __init__(self, experiment_name, params):
 
         job_name = 'data_upload'
-        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobName'] = f'{experiment_name}_{job_name}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         command_list = []
         
         command_list.append(
             utils.copy_folder_to_or_from_s3(
-                src_folder=params['input_dir'],
-                des_folder= Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'input')))
+                src_folder = params['input_dir'],
+                des_folder = Path('s3://velia-piperuns-dev').joinpath(f'{experiment_name}', 'input')))
         
         command_list.append(
             utils.copy_folder_to_or_from_s3(
-                src_folder=params['output_dir'],
-                des_folder=Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'output')))
+                src_folder = params['output_dir'],
+                des_folder = Path('s3://velia-piperuns-dev').joinpath(f'{experiment_name}', 'output')))
             
-        super().__init__(job_name, params, dependencies, command_list)
+        super().__init__(job_name, experiment_name, params, command_list)
 
 
 class CleanDirectories(Job):
@@ -232,10 +237,10 @@ class CleanDirectories(Job):
     A class to facilitate data upload to S3 upon job completion.
     """
 
-    def __init__(self, params, dependencies):
+    def __init__(self, experiment_name, params):
 
         job_name = 'data_upload'
-        params['jobName'] = f'{params["experiment_name"]}_{job_name}'
+        params['jobName'] = f'{experiment_name}_{job_name}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         command_list = []
@@ -243,14 +248,14 @@ class CleanDirectories(Job):
         command_list.append(
             utils.copy_folder_to_or_from_s3(
                 src_folder=params['input_dir'],
-                des_folder= Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'input')))
+                des_folder= Path('s3://velia-piperuns-dev').joinpath(f'{experiment_name}', 'input')))
         
         command_list.append(
             utils.copy_folder_to_or_from_s3(
                 src_folder=params['output_dir'],
-                des_folder=Path('s3://velia-piperuns-dev').join(f'{params["experiment_name"]}', 'output')))
+                des_folder=Path('s3://velia-piperuns-dev').joinpath(f'{experiment_name}', 'output')))
             
-        super().__init__(job_name, params, dependencies, command_list)
+        super().__init__(job_name, experiment_name, params, command_list)
 
 
 def submit_list_job(experiment_name, parameter_filepath, dependencies):

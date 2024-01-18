@@ -1,5 +1,6 @@
 '''Module containing pipeline entrypoints and definitions'''
 import click
+import pathlib
 
 from datetime import datetime
 from metaorf import utils, jobs
@@ -11,7 +12,7 @@ def define_jobs(sample_sheet, params):
 
     Parameters:
     -----------
-    sample_sheet : str
+    sample_sheet : pathlib.Path
         Absolute path to a CSV sample sheet file
     params : dict
         Any non-default parameters for pipeline run
@@ -46,12 +47,13 @@ def define_jobs(sample_sheet, params):
         'transcriptome_bed_file': 'veliadb_v1.bed',
         'pseudogenes': 'transcript_ids_on_pseudogenes.txt',
         'gene_names': 'genename_mapping.txt',
-        'jobQueue': 'bfx-jq-general'
+        'jobQueue': 'bfx-jq-metaorf',
+        'bucket_name': 'velia-piperuns-dev'
     }
 
-    params = default_params.update(params)
+    default_params.update(params)
 
-    return sample_df, jobs_df, params
+    return sample_df, jobs_df, default_params
 
 
 def submit_jobs(experiment_name, params, job_list):
@@ -74,18 +76,21 @@ def submit_jobs(experiment_name, params, job_list):
     curr_job_ids = []
 
     for job in job_list:
-        if len(job) > 1:
+        if type(job) == tuple:
             for subjob in job:
-                curr_job_ids.append(subjob.submit(experiment_name, params, dependencies=prev_job_ids))
+                subjob = subjob(experiment_name, params)
+                curr_job_ids.append(subjob.submit(dependencies=prev_job_ids))
+            curr_job_ids = [job_id for sublist in curr_job_ids for job_id in sublist]
         else:
-            curr_job_ids = job.submit(experiment_name, params, dependencies=prev_job_ids)
+            job = job(experiment_name, params)
+            curr_job_ids = job.submit(dependencies=prev_job_ids)
             
         prev_job_ids = curr_job_ids
         curr_job_ids = []
 
 
 @click.command()
-@click.argument('sample_sheet', type=str)
+@click.argument('sample_sheet', type=pathlib.Path)
 @click.option('--skip_orfcalling', default=False, help='Only run alignment tasks')
 def main(sample_sheet, skip_orfcalling):
     """
@@ -95,7 +100,7 @@ def main(sample_sheet, skip_orfcalling):
     sample_df, jobs_df, params = define_jobs(sample_sheet, options)
     piperun_dicts = utils.build_param_dicts(sample_df, jobs_df, params)
 
-    for experiment_name, param_dict in piperun_dicts.items():
+    for experiment_name, params in piperun_dicts.items():
 
         job_list = [jobs.PrepareData, 
                     jobs.PreprocessData,
@@ -104,6 +109,6 @@ def main(sample_sheet, skip_orfcalling):
                     jobs.UploadData,
                     jobs.CleanDirectories]
 
-        submit_jobs(experiment_name, param_dict, job_list)
+        submit_jobs(experiment_name, params, job_list)
 
 
