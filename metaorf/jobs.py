@@ -71,6 +71,8 @@ class Job:
             )
             job_id_list.append(response['jobId'])
 
+        print(self.command_list)
+
         return job_id_list
 
 
@@ -98,8 +100,8 @@ class PrepareData(Job):
         riboseq_filepaths_s3 = params['sample_paths_s3'].split(",") 
         if 'tis_paths' in params:
             riboseq_filepaths_s3 += params['tis_paths'].split(",")
-        command_list = utils.collect_input_data_for_orfrater(
-            riboseq_filepaths_s3, params['input_dir'])
+
+        command_list = utils.download_riboseq_file(riboseq_filepaths_s3, params['input_dir'])
 
         super().__init__('data_prep', experiment_name, params, command_list)
 
