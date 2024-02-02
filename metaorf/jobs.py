@@ -212,15 +212,11 @@ class UploadData(Job):
                 src_folder = params['input_dir'],
                 des_folder = '/'.join(['s3://velia-piperuns-dev', f'{experiment_name}', 'input'])))
         
-        print('\n\n\n', command_list, '\n\n\n')
-
         command_list.append(
             utils.copy_folder_to_or_from_s3(
                 src_folder = params['output_dir'],
                 des_folder = '/'.join(['s3://velia-piperuns-dev', f'{experiment_name}', 'output'])))
             
-        print('\n\n\n', command_list, '\n\n\n')
-
         super().__init__(params, command_list)
 
 

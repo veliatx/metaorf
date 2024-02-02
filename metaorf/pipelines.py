@@ -80,12 +80,10 @@ def submit_jobs(experiment_name, params, job_list):
             for subjob in job:
                 subjob = subjob(experiment_name, params)
                 curr_job_ids.append(subjob.submit(dependencies=prev_job_ids))
-                print(subjob, experiment_name, prev_job_ids, curr_job_ids)
             curr_job_ids = [job_id for sublist in curr_job_ids for job_id in sublist]
         else:
             job = job(experiment_name, params)
             curr_job_ids = job.submit(dependencies=prev_job_ids)
-            print(job, experiment_name, prev_job_ids, curr_job_ids)
 
         prev_job_ids = curr_job_ids
         curr_job_ids = []
