@@ -1,0 +1,67 @@
+[Header],,,,,,,,
+Date,230817,,,,,,,
+FileFormatVersion,2,,,,,,,
+RunName,YL12_PBMC_M0_MB1,,,,,,,
+InstrumentPlatform,NextSeq1k2k,,,,,,,
+IndexOrientation,Forward,,,,,,,
+,,,,,,,,
+[Reads],,,,,,,,
+Read1Cycles,51,,,,,,,
+Index1Cycles,6,,,,,,,
+,,,,,,,,
+[BCLConvert_Settings],,,,,,,,
+SoftwareVersion,3.8.4,,,,,,,
+CreateFastqForIndexReads,1,,,,,,,
+OverrideCycles,Y51;I6,,,,,,,
+FastqCompressionFormat,gzip,,,,,,,
+,,,,,,,,
+[BCLConvert_Data],,,,,,,,
+Sample_ID,Index,,,,,,,
+YL12_M0_a,GCCAAT,,,,,,,
+YL12_M0_b,CAGATC,,,,,,,
+YL12_M0_h,ACTTGA,,,,,,,
+YL12_M1_a,GATCAG,,,,,,,
+YL12_M1_h,TAGCTT,,,,,,,
+YL12_M2_a,GGCTAC,,,,,,,
+YL12_M2_b,CTTGTA,,,,,,,
+YL12_M2_c,AGTCAA,,,,,,,
+YL12_M2_h,AGTTCC,,,,,,,
+MB1_1A,GTCCGC,,,,,,,
+MB1_1B,GTGAAA,,,,,,,
+MB1_2A,GTGGCC,,,,,,,
+MB1_2B,GTTTCG,,,,,,,
+MB1_3A,CGTACG,,,,,,,
+MB1_3B,GAGTGG,,,,,,,
+,,,,,,,,
+[Samples],,,,,,,,
+experiment_id,sample_id,R1_fastq_file,R2_fastq_file,I1_fastq_file,containing_folder,adaptor_sequence,organism,umi
+MB1,MB1_1A,MB1_1A_S10_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+MB1,MB1_1B,MB1_1B_S11_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+MB1,MB1_2A,MB1_2A_S12_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+MB1,MB1_2B,MB1_2B_S13_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+MB1,MB1_3A,MB1_3A_S14_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+MB1,MB1_3B,MB1_3B_S15_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,Undetermined,Undetermined_S0_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M0_a,YL12_M0_a_S1_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M0_b,YL12_M0_b_S2_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M0_h,YL12_M0_h_S3_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M1_a,YL12_M1_a_S4_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M1_h,YL12_M1_h_S5_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M2_a,YL12_M2_a_S6_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M2_b,YL12_M2_b_S7_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M2_c,YL12_M2_c_S8_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+YL12,YL12_M2_h,YL12_M2_h_S9_R1_001.fastq.gz,,,230817_VH01198_31_AAAYGJGHV,AGATCGGAAGAGCACACGTCT,human,NNNNNNX
+,,,,,,,,
+,,,,,,,,
+[Riboseq_jobs],,,,,,,,
+CHX,TIS,Note,,,,,,
+MB1_1A,,HCT116 replicate with 0.4 Ratio RNase I compared with TIS enriched Harri treated HCT116,,,,,,
+MB1_2A,,HCT116 replicate with 0.4 Ratio RNase I compared with TIS enriched Harri treated HCT116,,,,,,
+MB1_1B,,HCT116 replicate with 0.5 Ratio RNase I compared with TIS enriched Harri treated HCT116,,,,,,
+MB1_2B,,HCT116 replicate with 0.5 Ratio RNase I compared with TIS enriched Harri treated HCT116,,,,,,
+YL12_M0_a,,Macrophage M0 replicate with 0.4 ratio RNaseI compared with TIS enriched Harri treated M0,,,,,,
+YL12_M0_b,,Macrophage M0 replicate with 0.4 ratio RNaseI compared with TIS enriched Harri treated M0,,,,,,
+YL12_M1_a,,Macrophage M1 replicate with 0.4 ratio RNaseI compared with TIS enriched Harri treated M1,,,,,,
+YL12_M2_a,,Macrophage M2 replicate with 0.4 ratio RNaseI compared with TIS enriched Harri treated M2,,,,,,
+YL12_M2_b,,Macrophage M2 replicate with 0.4 ratio RNaseI compared with TIS enriched Harri treated M2,,,,,,
+YL12_M2_c,,Macrophage M2 replicate with 0.4 ratio RNaseI compared with TIS enriched Harri treated M2,,,,,,

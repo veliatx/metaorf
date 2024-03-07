@@ -225,7 +225,7 @@ class Orfquant(Job):
 
         job_type = 'orfquant'
         params['jobName'] = f'{experiment_name}_{job_type}'
-        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/orfquant:3'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/orfquant:2'
         
         orf_calling_cmd = [
             'python3', 'src/main_run_orfquant.py',
@@ -235,7 +235,6 @@ class Orfquant(Job):
             '--reference_genomes', params['reference_genomes'],
             '--genome_annotation_prefix', params['genome_annotation_prefix'],]
     
-        params['jobQueue'] = params['jobQueue_large_instance']
         super().__init__(params, [orf_calling_cmd])
 
 
@@ -290,7 +289,7 @@ class UploadData(Job):
 
 class CleanDirectories(Job):
     """
-    A class to remove the local copy of the data upon job completion.
+    A class to facilitate data upload to S3 upon job completion.
     """
 
     def __init__(self, experiment_name, params):
@@ -300,8 +299,15 @@ class CleanDirectories(Job):
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4'
 
         command_list = []
-        command_list.append(utils.remove_folder(params['input_dir']))
-        command_list.append(utils.remove_folder(params['output_dir']))
+        
+        command_list.append(
+            utils.copy_folder_to_or_from_s3(
+                src_folder=params['input_dir'],
+                des_folder= Path('s3://velia-piperuns-dev').joinpath(f'{experiment_name}', 'input')))
+        
+        command_list.append(
+            utils.copy_folder_to_or_from_s3(
+                src_folder=params['output_dir'],
+                des_folder=Path('s3://velia-piperuns-dev').joinpath(f'{experiment_name}', 'output')))
             
         super().__init__(params, command_list)
-

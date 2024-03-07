@@ -125,36 +125,6 @@ def parse_samplesheet(sample_csv_path):
     return sample_df, job_df
 
 
-def get_s3_paths(sample_df):
-    sample_path_list = []
-    for idx, row in sample_df.iterrows():
-        containing_folder = row["containing_folder"]
-        R1_fastq_files = row["R1_fastq_file"].split(";")
-        if containing_folder.startswith("s3"):
-            for fastq_file in R1_fastq_files:
-                sample_path_list.append(os.path.join(
-                    containing_folder, fastq_file))
-        else:
-            for fastq_file in R1_fastq_files:
-                sample_path_list.append(os.path.join(
-                    "s3://velia-data-dev/VDC_003_ngs/primary/raw_data/",
-                    containing_folder,
-                    "Analysis/1/Data/fastq",
-                    fastq_file))
-    return sample_path_list
-
-
-def get_uniform_param(params):
-    current_param = None
-    for _, param in params.items():
-        if current_param is None:
-            current_param = param
-        elif current_param != param:
-            error_msg = f"Each experiment can only have one type of UMI and adapter. But we got: {param_df}"
-            exit(error_msg)
-    return current_param
-
-
 def build_param_dicts(sample_df, jobs_df, params):
     """
     Build a dictionary of parameter dictionaries, one for each individual job
@@ -188,22 +158,21 @@ def build_param_dicts(sample_df, jobs_df, params):
         chx_sample_df = sample_df.loc[chx_samples]
         job_name = f"{job_name}_{'_'.join(chx_sample_df.index)}"
 
-
-        sample_paths_s3 = get_s3_paths(chx_sample_df)
+        sample_paths_s3 = chx_sample_df['containing_folder'] + chx_sample_df['R1_fastq_file'].to_list()
+        
         piperun_dict['experiment_name'] = job_name
         piperun_dict['sample_paths_s3'] = ",".join(sample_paths_s3)
-        piperun_dict['umi'] = get_uniform_param(chx_sample_df['umi'])
-        piperun_dict['adapter_sequence'] = get_uniform_param(chx_sample_df['adaptor_sequence'])
+        piperun_dict['umi'] = ','.join(chx_sample_df['umi'])
+        piperun_dict['adapter_sequence'] = ','.join(chx_sample_df['adaptor_sequence'])
         piperun_dict['input_dir'] = params['input_dir'] + f'_{index}'
         piperun_dict['output_dir'] = params['output_dir'] + f'_{index}'
         
         if row["TIS"] != '':
             tis_samples = row["TIS"].split(';')
             tis_sample_df = sample_df.loc[tis_samples]
-            tis_paths = get_s3_paths(tis_sample_df)
-            piperun_dict['tis_paths'] = ",".join(tis_paths)
-            piperun_dict['umi_tis'] = get_uniform_param(tis_sample_df['umi'])
-            piperun_dict['adapter_sequence_tis'] = get_uniform_param(tis_sample_df['adaptor_sequence'])
+            tis_paths = tis_sample_df['containing_folder'] + tis_sample_df['R1_fastq_file'].to_list()
+            piperun_dict['umi_tis'] = ','.join(tis_sample_df['umi'])
+            piperun_dict['adapter_sequence_tis']: ','.join(tis_sample_df['adapter_sequence'])
 
         piperun_dicts[job_name] = piperun_dict
 
