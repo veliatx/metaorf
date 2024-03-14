@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 import math
 import os
+import pickle
+
+
+from metaorf.modeling.ensemble import Dataset
 
 
 def download_feature_set(experiment_name, local_folder):
@@ -137,6 +141,56 @@ def load_features(data_dir, datasets):
     feature_df = feature_df.groupby('orf_id').mean()
     
     return feature_df
+
+
+
+def load_truth_datasets(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'MB1', 'Gaertner']):
+    """
+    """
+    datasets = {}
+
+    X_dfs = []
+    y_arrays = []
+    orf_ids = []
+
+    if not overwrite and data_dir.joinpath('datasets.pkl').exists():
+        with open(data_dir.joinpath('datasets.pkl'), 'rb') as file:
+            datasets = pickle.load(file)
+            return datasets
+
+    for dataset_name in dataset_names:
+
+        dataset_file_names = []
+        with open(data_dir.joinpath(f'{dataset_name}.txt'), 'r') as infile:
+            for line in infile.readlines():
+                exp_name = line.rstrip('\n')
+                dataset_file_names.append(f"{exp_name}_orf_features.csv")
+
+        truth_label = f'score.({dataset_name})'
+        feature_df = load_features(data_dir, dataset_file_names)
+
+        merged_df = truth_df[['orf_id', truth_label]].merge(feature_df, left_on='orf_id', right_index=True)
+        merged_df.reset_index(inplace=True)
+
+        y = merged_df[truth_label].copy()
+        y[y > 0] = 1
+        y = y.values
+
+        numeric_feat_df = merged_df.drop(columns=['orf_id', truth_label, 'index'])
+        X = numeric_feat_df
+
+        X_dfs.append(X)
+        y_arrays.append(y)
+        orf_ids.append(merged_df['orf_id'])
+
+        datasets[dataset_name] = Dataset(X, y, dataset_name, merged_df['orf_id'])
+
+    datasets['all'] = Dataset(pd.concat(X_dfs), np.concatenate(y_arrays), 'all',  pd.concat(orf_ids))
+
+    with open(data_dir.joinpath('datasets.pkl'), 'wb') as file:
+        pickle.dump(datasets, file)
+
+    return datasets
 
 
 def download_feature_set(experiment_name, local_path):

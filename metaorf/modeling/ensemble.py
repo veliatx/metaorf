@@ -120,7 +120,9 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
         cloned_classifier = clone(classifier)
 
         cloned_classifier.fit(ds.X.iloc[train], ds.y[train])
-        viz = roc_curve(ds.y[test], cloned_classifier.predict_proba(ds.X.iloc[test])[:, 1])
+        y_test = cloned_classifier.predict_proba(ds.X.iloc[test])[:, 1]
+        y = ds.y[test]
+        viz = roc_curve(y, y_test)
         fpr, tpr, thresholds = viz
         feature_importances.append(cloned_classifier.feature_importances_)
         
