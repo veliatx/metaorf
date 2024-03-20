@@ -5,8 +5,7 @@ import numpy as np
 from sklearn.pipeline import make_pipeline
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, HistGradientBoostingClassifier
 from sklearn.metrics import RocCurveDisplay, roc_curve, auc, precision_recall_curve, average_precision_score, classification_report
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, StratifiedKFold, cross_validate
-from sklearn.experimental import enable_hist_gradient_boosting
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, RepeatedStratifiedKFold, StratifiedKFold, cross_validate
 from sklearn.base import clone
 
 import matplotlib.pyplot as plt
@@ -23,6 +22,8 @@ class Dataset:
 
 
 def plot_roc_pr(X, y, model, fpr_cutoff=0.1, n_splits=10):
+    """
+    """
     cv = StratifiedKFold(n_splits=n_splits)
     
     feature_importances = []
@@ -99,6 +100,59 @@ def plot_roc_pr(X, y, model, fpr_cutoff=0.1, n_splits=10):
     return closest_model, feature_importances, fig
 
 
+def plot_pr(X, y, model, n_splits=5):
+    """
+    """
+    cv = RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=2)
+
+    feature_importances = []
+
+    precisions = []
+    aps = []
+    thresholds = []
+    mean_recall = np.linspace(0, 1, 100)
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    for i, (train, test) in enumerate(cv.split(X, y)):
+        X_train, X_test = X.iloc[train], X.iloc[test]
+        y_train, y_test = y[train], y[test]
+        model_clone = clone(model)
+        model_clone.fit(X_train, y_train)
+        feature_importances.append(model_clone.feature_importances_)
+
+        y_score = model_clone.predict_proba(X_test)[:, 1]
+        precision, recall, threshold = precision_recall_curve(y_test, y_score)
+        threshold = np.append(threshold, 1)
+        ap = average_precision_score(y_test, y_score)
+        precisions.append(np.interp(mean_recall, recall[::-1], precision[::-1]))
+        aps.append(ap)
+        thresholds.append(np.interp(mean_recall, recall[::-1], threshold[::-1]))
+        
+        ax.plot(recall, precision, alpha=0.3, label=f'PR fold {i+1} (AP = {ap:.2f})')
+
+    mean_precision = np.mean(precisions, axis=0)
+    std_precision = np.std(precisions, axis=0)
+
+    mean_thresh = np.mean(thresholds, axis=0)
+    std_thresh = np.std(thresholds, axis=0)
+
+    ax.plot(mean_recall, mean_thresh, color='black',
+            label=f'Mean Decision Probability', lw=2, alpha=0.8)
+    ax.fill_between(mean_recall, mean_thresh-(std_thresh/2), mean_thresh+(std_thresh/2), color='grey', alpha=0.2)
+
+    ax.plot(mean_recall, mean_precision, color='blue',
+            label=f'Mean PR (AP = {np.mean(aps):.2f} $\pm$ {np.std(aps):.2f})', lw=2, alpha=0.8)
+    ax.fill_between(mean_recall, mean_precision-std_precision, mean_precision+std_precision, color='grey', alpha=0.2)
+
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.set_title('Precision-Recall Curves Across K-Fold Validation')
+    ax.legend(loc="lower left")
+
+    return feature_importances, fig
+
+
 def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
     """
     """
@@ -112,7 +166,6 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
 
     fpr_cutoff=0.05
     closest_fpr_diff = float('inf')
-    best_model = None
     feature_importances = []
 
     for i, (train, test) in enumerate(cv.split(ds.X, ds.y)):
@@ -125,13 +178,6 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
         viz = roc_curve(y, y_test)
         fpr, tpr, thresholds = viz
         feature_importances.append(cloned_classifier.feature_importances_)
-        
-        fpr_diff = np.abs(fpr - fpr_cutoff)
-        min_fpr_diff_index = np.argmin(fpr_diff)
-        if fpr_diff[min_fpr_diff_index] < closest_fpr_diff:
-            closest_fpr_diff = fpr_diff[min_fpr_diff_index]
-            best_model = cloned_classifier
-            ds.model = cloned_classifier
 
         tprs.append(np.interp(mean_fpr, fpr, tpr))
         tprs[-1][0] = 0.0
@@ -159,5 +205,5 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
         title="Receiver Operating Characteristic")
     ax.legend(loc="lower right")
     
-    return best_model, feature_importances, fig
+    return feature_importances, fig
 

@@ -132,14 +132,17 @@ def load_features(data_dir, datasets):
 
     feature_dfs = []
     for dataset in datasets:
-        feature_dfs.append(pd.read_csv(data_dir.joinpath(f'{dataset}'), sep='\t'))
+        tmp_df = pd.read_csv(data_dir.joinpath(f'{dataset}'), sep='\t')
+        tmp_df['dataset'] = '-'.join(dataset.split('_')[:-2])
+        feature_dfs.append(tmp_df)
     
     feature_df = pd.concat(feature_dfs)
-    feature_df['orf_id'] = feature_df.apply(lambda x: f'{x.chrom_id}_{x.orf_start}_{x.orf_end}_{x.strand}_{x.exon_blocks}', axis=1)
-    feature_df.set_index('orf_id', inplace=True)
-    feature_df = feature_df.select_dtypes(include='number')
-    feature_df = feature_df.groupby('orf_id').mean()
     
+    feature_df['orf_id'] = feature_df.apply(lambda x: f'{x.chrom_id}_{x.orf_start}_{x.orf_end}_{x.strand}_{x.exon_blocks}_{x.dataset}', axis=1)
+    feature_df['orf_idx_str'] =  feature_df.apply(lambda x: f'{x.chrom_id}_{x.orf_start}_{x.orf_end}_{x.strand}_{x.exon_blocks}', axis=1)
+
+    feature_df.set_index('orf_id', inplace=True)
+
     return feature_df
 
 
@@ -169,14 +172,16 @@ def load_truth_datasets(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'M
         truth_label = f'score.({dataset_name})'
         feature_df = load_features(data_dir, dataset_file_names)
 
-        merged_df = truth_df[['orf_id', truth_label]].merge(feature_df, left_on='orf_id', right_index=True)
+        merged_df = truth_df[['orf_id', truth_label]].merge(feature_df, left_on='orf_id', right_on='orf_idx_str')
         merged_df.reset_index(inplace=True)
 
         y = merged_df[truth_label].copy()
         y[y > 0] = 1
         y = y.values
 
-        numeric_feat_df = merged_df.drop(columns=['orf_id', truth_label, 'index'])
+        drop_cols = ['chrom_id', 'orf_start', 'orf_end', 'strand', 'exon_blocks', 'dataset',
+                     'orf_sequence', 'orf_id', 'orf_idx_str', truth_label, 'index']
+        numeric_feat_df = merged_df.drop(columns=drop_cols)
         X = numeric_feat_df
 
         X_dfs.append(X)
