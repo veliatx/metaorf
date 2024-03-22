@@ -146,7 +146,6 @@ def load_features(data_dir, datasets):
     return feature_df
 
 
-
 def load_truth_datasets(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'MB1', 'Gaertner']):
     """
     """
@@ -172,15 +171,19 @@ def load_truth_datasets(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'M
         truth_label = f'score.({dataset_name})'
         feature_df = load_features(data_dir, dataset_file_names)
 
-        merged_df = truth_df[['orf_id', truth_label]].merge(feature_df, left_on='orf_id', right_on='orf_idx_str')
+        drop_cols = ['chrom_id', 'orf_start', 'orf_end', 'strand', 'exon_blocks', 'dataset',
+                     'orf_sequence']
+        feature_df = feature_df.drop(columns=drop_cols)
+        feature_df = feature_df.groupby('orf_idx_str').mean()
+
+        merged_df = truth_df[['orf_id', truth_label]].merge(feature_df, left_on='orf_id', right_index=True)
         merged_df.reset_index(inplace=True)
 
         y = merged_df[truth_label].copy()
         y[y > 0] = 1
         y = y.values
 
-        drop_cols = ['chrom_id', 'orf_start', 'orf_end', 'strand', 'exon_blocks', 'dataset',
-                     'orf_sequence', 'orf_id', 'orf_idx_str', truth_label, 'index']
+        drop_cols = ['orf_id', truth_label, 'index']
         numeric_feat_df = merged_df.drop(columns=drop_cols)
         X = numeric_feat_df
 
