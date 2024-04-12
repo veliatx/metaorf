@@ -55,7 +55,7 @@ def plot_roc_pr(X, y, model, fpr_cutoff=0.1, n_splits=10):
     fig, ax = plt.subplots(1, 2, figsize=(14, 5))
     
     #for i, (train, test) in enumerate(cv.split(X, y)):
-    for i, (train, test) in StratifiedByChrom(X):
+    for (train, test) in StratifiedByChrom(X):
         X_train, X_test = X.drop(columns=['chrom_id']).iloc[train], X.drop(columns=['chrom_id']).iloc[test]
         y_train, y_test = y[train], y[test]
         model_clone = clone(model)
@@ -130,7 +130,7 @@ def plot_pr(X, y, model, n_splits=5):
     fig, ax = plt.subplots(figsize=(10, 8))
 
     #for i, (train, test) in enumerate(cv.split(X, y)):
-    for i, (train, test) in StratifiedByChrom(X):
+    for (train, test) in StratifiedByChrom(X):
         X_train, X_test = X.drop(columns=['chrom_id']).iloc[train], X.drop(columns=['chrom_id']).iloc[test]
         y_train, y_test = y[train], y[test]
         model_clone = clone(model)
@@ -185,7 +185,7 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
     feature_importances = []
 
     #for i, (train, test) in enumerate(cv.split(ds.X, ds.y)):
-    for i, (train, test) in StratifiedByChrom(ds.X):
+    for (train, test) in StratifiedByChrom(ds.X):
         X_train, X_test = ds.X.drop(columns=['chrom_id']).iloc[train], ds.X.drop(columns=['chrom_id']).iloc[test]
         y_train, y_test = ds.y[train], ds.y[test]
         cloned_classifier = clone(classifier)
