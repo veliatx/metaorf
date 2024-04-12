@@ -25,10 +25,9 @@ def define_jobs(sample_sheet, params):
     """
     sample_df, jobs_df = utils.parse_samplesheet(sample_sheet)
 
-    timestamp = 20240302002008
+    timestamp = 20240107064431
 
     default_params = {
-        'orfcallers': 'ribocode',
         'multimap': 10,
         'skip_orfcalling': False,
         'timestamp': timestamp,
@@ -38,10 +37,11 @@ def define_jobs(sample_sheet, params):
         'contaminant_genomes': 'hg38_rRNA.fa,hg38_tRNA.fa',
         'reference_genomes': 'GRCh38.p14.genome.fa',
         'genome_annotation_prefix': 'veliadb_v1_1.fixed',
-        'contaminant_genome_index': 'star',
-        'reference_genome_index': 'star',
-        'callers': 'price,ribotish,ribocode',
+        'contaminant_genome_index': 'star_veliadb_v1_1',
+        'reference_genome_index': 'star_veliadb_v1_1',
+        'callers': 'price,ribotish,ribocode,orfquant',
         'jobQueue': 'bfx-jq-general',
+        'jobQueue_large_instance': 'bfx-jq-general',
         'bucket_name': 'velia-piperuns-dev'
     }
 
