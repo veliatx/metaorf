@@ -55,6 +55,7 @@ def plot_roc_pr(X, y, model, fpr_cutoff=0.1, n_splits=10):
     fig, ax = plt.subplots(1, 2, figsize=(14, 5))
     
     #for i, (train, test) in enumerate(cv.split(X, y)):
+    i = 0
     for (train, test) in StratifiedByChrom(X):
         X_train, X_test = X.drop(columns=['chrom_id']).iloc[train], X.drop(columns=['chrom_id']).iloc[test]
         y_train, y_test = y[train], y[test]
@@ -85,6 +86,8 @@ def plot_roc_pr(X, y, model, fpr_cutoff=0.1, n_splits=10):
         if fpr_diff[min_fpr_diff_index] < closest_fpr_diff:
             closest_fpr_diff = fpr_diff[min_fpr_diff_index]
             closest_model = model_clone
+
+        i += 1
     
     # Plot mean ROC and PR curves with error bars
     mean_tpr = np.mean(tprs, axis=0)
@@ -130,6 +133,7 @@ def plot_pr(X, y, model, n_splits=5):
     fig, ax = plt.subplots(figsize=(10, 8))
 
     #for i, (train, test) in enumerate(cv.split(X, y)):
+    i = 0
     for (train, test) in StratifiedByChrom(X):
         X_train, X_test = X.drop(columns=['chrom_id']).iloc[train], X.drop(columns=['chrom_id']).iloc[test]
         y_train, y_test = y[train], y[test]
@@ -146,6 +150,7 @@ def plot_pr(X, y, model, n_splits=5):
         thresholds.append(np.interp(mean_recall, recall[::-1], threshold[::-1]))
         
         ax.plot(recall, precision, alpha=0.3, label=f'PR fold {i+1} (AP = {ap:.2f})')
+        i += 1
 
     mean_precision = np.mean(precisions, axis=0)
     std_precision = np.std(precisions, axis=0)
@@ -185,6 +190,7 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
     feature_importances = []
 
     #for i, (train, test) in enumerate(cv.split(ds.X, ds.y)):
+    i = 0
     for (train, test) in StratifiedByChrom(ds.X):
         X_train, X_test = ds.X.drop(columns=['chrom_id']).iloc[train], ds.X.drop(columns=['chrom_id']).iloc[test]
         y_train, y_test = ds.y[train], ds.y[test]
@@ -201,6 +207,8 @@ def plot_roc(ds, classifier, n_splits=5, fpr_cutoff=.05):
         roc_auc = auc(fpr, tpr)
         aucs.append(roc_auc)
         ax.plot(fpr, tpr, lw=1, alpha=0.3, label=f'ROC fold {i+1} (AUC = {roc_auc:.2f})')
+
+        i += 1
         
 
     mean_tpr = np.mean(tprs, axis=0)
