@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Startup path enforced on launch.
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+env
+
+if [ -x /etc/startup.sh ]; then
+  echo Found startup.sh - running
+  . /etc/startup.sh
+fi
+
+if [ ! -x /usr/bin/runsvdir ]; then
+  echo ERROR - unable to execute /usr/bin/runsvdir
+  sleep 10
+  exit
+fi
+
+exec env - PATH=$PATH /usr/bin/runsvdir -P /etc/service

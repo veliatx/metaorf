@@ -1,0 +1,12 @@
+{
+	"experiment_name": "BL11_PBMCL1_2_S7_R1_001",
+	"sample_paths_s3": "s3://velia-data-dev/VDC_003_ngs/primary/raw_data/230222_VH01198_15_AAAY5CMHV/Analysis/1/Data/fastq/BL11_PBMCL1_2_S7_R1_001.fastq.gz",
+        "input_dir": "/mount/efs/riboseq_callers/data/PRICE/input_batch_tmp_1/",
+        "output_dir": "/mount/efs/riboseq_callers/data/PRICE/output_batch_tmp_1",
+        "contaminant_genomes": "hg38_rRNA.fa,hg38_tRNA.fa",
+	"reference_genomes": "hg38_no-altChr.fa",
+        "genome_annotation_prefix": "hg38_CHESS_supplemented_GENCODE/genocde_and_chess",
+	"contaminant_genome_index": "contaminant/star_contaminant_riboseq_index",
+	"reference_genome_index": "hg38_CHESS_supplemented_GENCODE/star_hg38_riboseq_index_star_2_7_4a",
+        "multimap": 3
+}

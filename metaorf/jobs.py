@@ -248,20 +248,35 @@ class PostprocessData(Job):
 
         job_type = 'data_post_process'
         params['jobName'] = f'{experiment_name}_{job_type}'
-        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/post_processing:1'
+        params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/post_processing:2'
         
-        data_process_cmd = [
-            'python3', 'src/main_run_post_processing.py',
-            '--experiment_name', experiment_name,
-            '--annotation_dir', params['annotation_dir'],
-            '--output_dir', params['output_dir'],
-            '--reference_genomes', params['reference_genomes'],
-            '--genome_annotation_prefix', params['genome_annotation_prefix'],
-            '--callers', params['callers'],]
+        if 'transcript_list_file' in params:
+            data_process_cmd = [
+                'python3', 'src/main_run_post_processing.py',
+                '--experiment_name', experiment_name,
+                '--annotation_dir', params['annotation_dir'],
+                '--output_dir', params['output_dir'],
+                '--reference_genomes', params['reference_genomes'],
+                '--genome_annotation_prefix', params['genome_annotation_prefix'],
+                '--callers', params['callers'],
+                '--transcript_list_file', params['transcript_list_file'],
+                '--rna_seq_name', params['rna_seq_name'],
+                '--organism', params['organism'],
+                '--transcript_tpm_threshold', 0.5]
+        else:
+            data_process_cmd = [
+                'python3', 'src/main_run_post_processing.py',
+                '--experiment_name', experiment_name,
+                '--annotation_dir', params['annotation_dir'],
+                '--output_dir', params['output_dir'],
+                '--reference_genomes', params['reference_genomes'],
+                '--genome_annotation_prefix', params['genome_annotation_prefix'],
+                '--organism', params['organism'],
+                '--callers', params['callers']]
     
         super().__init__(params, [data_process_cmd])
 
-
+ 
 class UploadData(Job):
     """
     A class to facilitate data upload to S3 upon job completion.

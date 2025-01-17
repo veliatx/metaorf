@@ -1,0 +1,12 @@
+{
+	"experiment_name": "sample_SRR9113064_1",
+	"sample_paths_s3": "s3://velia-archive-dev/velia/data/chen_science/fastq/SRR9113064_1.fastq.gz",
+        "input_dir": "/mount/efs/riboseq_callers/data/PRICE/input_batch_tmp_1/",
+        "output_dir": "/mount/efs/riboseq_callers/data/PRICE/output_batch_tmp_1",
+        "contaminant_genomes": "hg38_rRNA.fa,hg38_tRNA.fa",
+	"reference_genomes": "hg38_no-altChr.fa",
+        "genome_annotation_prefix": "hg38_CHESS_supplemented_GENCODE/genocde_and_chess",
+	"contaminant_genome_index": "contaminant/star_contaminant_riboseq_index",
+	"reference_genome_index": "hg38_CHESS_supplemented_GENCODE/star_hg38_riboseq_index_star_2_7_4a",
+        "multimap": 3
+}

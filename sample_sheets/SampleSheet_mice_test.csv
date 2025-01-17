@@ -1,0 +1,8 @@
+[Samples],,,,,,,
+experiment_id,sample_id,R1_fastq_file,containing_folder,adaptor_sequence,organism,umi,rna_seq_name
+SRR5262890,SRR5262890,SRR5262890.fastq.gz,s3://velia-piperuns-dev/riboseq_files/jun3_2024/,AGATCGGAAGAGCACACGTCTGAACTCCAGTCA,mouse,,
+,,,,,,,
+,,,,,,,
+[Riboseq_jobs],,,,,,,
+CHX,TIS,Note,,,,,
+SRR5262890,,"P42_Liver_Ribo_rep1; Mus musculus",,,,,

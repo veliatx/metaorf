@@ -36,6 +36,31 @@ def load_from_merged_orf_file(merged_orf_calls_file):
     return orfs
 
 
+def add_tis_transformer_feature(orfs, tis_transformer_file, callers):
+    score_map = {}
+    for line in open(tis_transfromer_file):
+        transcript_id, chrom_id, pos, tis_transformer_score = line.strip().split()
+        pos = int(pos)
+        tis_transformer_score = float(tis_transformer_score)
+        if transcript_id not in score_map:
+            score_map[transcript_id] = {}
+        score_map[transcript_id][(chrom_id, pos)] = tis_transformer_score
+        
+    for orf in orfs.values():
+        chrom_id = orf["chrom_id"]
+        if orf["strand"] == "+":
+            pos = orf["orf_start"]
+        elif orf["strand"] == "-"
+            pos = orf["orf_end"] - 1
+            
+        tis_transformer_score = 0
+        for caller in callers:
+            transcript_id = orf[f"transcript_id_{caller}"]
+            if transcript_id in score_map and (chrom_id, pos) in score_map[transcript_id]:
+                tis_transformer_score = max(tis_transformer_score, score_map[transcript_id][(chrom_id, pos)])
+        orf["tis_transformer_score"] = tis_transformer_score
+
+
 def save_into_file(orfs, coverages, drop_values, callers, feature_file_path):
     coverage_features, drop_features = None, None
     with open(feature_file_path, "w") as ofile:
@@ -47,7 +72,8 @@ def save_into_file(orfs, coverages, drop_values, callers, feature_file_path):
                 header = header + "\t" + "\t".join(coverage_features)
                 drop_features = [feature_name for feature_name in drop_values[orf_key]]
                 header = header + "\t" + "\t".join(drop_features)
-                header += "\t"+"\t".join(callers)+"\n"
+                header = header + "\t" + "\t".join(callers)
+                header = header + "\t" + "tis_transformer_score" + "\n"
                 ofile.write(header)
 
             line_to_write = "\t".join([str(val) for val in orf_key])
@@ -57,7 +83,8 @@ def save_into_file(orfs, coverages, drop_values, callers, feature_file_path):
 
             scores = [orf[f"orf_score_{caller}"]
                         if orf[f"orf_score_{caller}"].strip() else "0" for caller in callers]
-            line_to_write += "\t"+"\t".join(scores)+"\n"
+            line_to_write = line_to_write + "\t" + "\t".join(scores)
+            line_to_write = line_to_write + "\t" + orf["tis_transformer_score"] + "\n"
             ofile.write(line_to_write)
 
 
@@ -73,7 +100,7 @@ def get_by_eye_features(orfs_of_interest_file, experiment_name, data_dir, caller
     return orfs, coverages, drop_values
 
 
-def generate_features_main(experiment_name, data_dir, transcript_bed_file, callers):
+def generate_features_main(experiment_name, data_dir, transcript_bed_file, tis_transfromer_file, callers):
     transcript_coordinates = orf_utils.read_transcript_bed_file(transcript_bed_file)
     orfs, coverages, drop_values = get_by_eye_features(
         orfs_of_interest_file=f"{data_dir}/{experiment_name}_found_by_any_caller.csv",
@@ -81,6 +108,7 @@ def generate_features_main(experiment_name, data_dir, transcript_bed_file, calle
         data_dir=data_dir,
         callers=callers,
         transcript_coordinates=transcript_coordinates)
+    add_tis_transformer_feature(orfs, tis_transformer_file, callers)
     save_into_file(orfs, coverages, drop_values, callers,
                    feature_file_path=f"{data_dir}/{experiment_name}_orf_features.csv")
     

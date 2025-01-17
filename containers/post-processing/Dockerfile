@@ -22,11 +22,15 @@ RUN cd samtools-1.19 && make && make install
 
 # install python libs
 RUN pip install git-remote-codecommit numpy awscli pandas biopython pyBigWig
+RUN pip install fsspec s3fs
 
 
 WORKDIR /usr/src/
 COPY src src
 COPY tools tools
+COPY veliadb veliadb
+
+RUN pip install -e veliadb
 
 RUN chmod -R 777 /usr/src/
     

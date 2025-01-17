@@ -194,6 +194,8 @@ def build_param_dicts(sample_df, jobs_df, params):
         piperun_dict['sample_paths_s3'] = ",".join(sample_paths_s3)
         piperun_dict['umi'] = get_uniform_param(chx_sample_df['umi'])
         piperun_dict['adapter_sequence'] = get_uniform_param(chx_sample_df['adaptor_sequence'])
+        piperun_dict['organism'] = get_uniform_param(chx_sample_df['organism'])
+        piperun_dict['rna_seq_name'] = get_uniform_param(chx_sample_df['rna_seq_name'])
         piperun_dict['input_dir'] = params['input_dir'] + f'_{index}'
         piperun_dict['output_dir'] = params['output_dir'] + f'_{index}'
         

@@ -49,6 +49,7 @@ def define_jobs(sample_sheet, params):
     #     'jobQueue_large_instance': 'bfx-jq-general',
     #     'bucket_name': 'velia-piperuns-dev'
     # }
+
     default_params = {
         'multimap': 10,
         'skip_orfcalling': False,
@@ -61,15 +62,34 @@ def define_jobs(sample_sheet, params):
         'genome_annotation_prefix': 'veliadb_v1_1.fixed', # 'veliadb_v2.fixed',
         'contaminant_genome_index': 'star_veliadb_v1_1',
         'reference_genome_index': 'star_veliadb_v1_1',
-        'callers': 'price,ribotish,ribocode,orfquant',
+        'callers': 'price,ribotish,ribocode',
         'jobQueue': 'bfx-jq-metaorf',
         'jobQueue_large_instance': 'bfx-jq-general',
-        'bucket_name': 'velia-piperuns-dev'
+        'bucket_name': 'velia-piperuns-dev',
+        'transcript_list_file': 'transcript_TPM_240419.tsv',
     }
+
+    # default_params = {
+    #     'multimap': 10,
+    #     'skip_orfcalling': False,
+    #     'timestamp': timestamp,
+    #     'input_dir': f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}',
+    #     'output_dir': f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}',
+    #     'annotation_dir': '/mount/efs/riboseq_callers/data/ORFrater/mouse_GRCm39',
+    #     'contaminant_genomes': 'mm10_rRNA.fa,mm10_tRNA.fa',
+    #     'reference_genomes': 'GRCm39.primary_assembly.genome.fa',
+    #     'genome_annotation_prefix': 'gencode.vM35.primary_assembly.annotation',
+    #     'contaminant_genome_index': 'star',
+    #     'reference_genome_index': 'star',
+    #     'callers': 'price,ribotish,ribocode',
+    #     'jobQueue': 'bfx-jq-metaorf',
+    #     'jobQueue_large_instance': 'bfx-jq-general',
+    #     'bucket_name': 'velia-piperuns-dev'
+    # }
 
     default_params.update(params)
 
-    return sample_df, jobs_df, default_params
+    return sample_df, jobs_df, default_params 
 
 
 def submit_jobs(experiment_name, params, job_list):

@@ -134,12 +134,16 @@ class ribocode_result_processor(orf_result_processor):
                     transcript_coordinates[orf["transcript_id"]], orf_tstart, orf_tstop, ref_sequences)
                 
                 log_score = -math.log10(float(orf["pval_combined"])) if float(orf["pval_combined"]) != 0 else 999
-                ribocode_result_quick_check[
-                    (orf["chrom"], orf_start, orf_end, orf["strand"], orf_sequence, orf_blocks)] = [
+
+                orf_key = (orf["chrom"], orf_start, orf_end, orf["strand"], orf_sequence, orf_blocks)
+                if orf_key not in ribocode_result_quick_check:
+                    ribocode_result_quick_check[orf_key] = []
+                
+                ribocode_result_quick_check[orf_key].append([
                         orf["gene_id"],
                         orf["transcript_id"],
                         orf["ORF_type"],
-                        log_score]
+                        log_score])
         return ribocode_result_quick_check
 
 
@@ -172,12 +176,15 @@ class ribotish_result_processor(orf_result_processor):
                 orf_start, orf_end = start_end.split("-")
                 log_score = -math.log10(float(orf["RiboPvalue"])) if float(orf["RiboPvalue"]) != 0 else 999
                 orf_blocks = "|".join(orf["Blocks"].split(","))
-                ribotish_result_quick_check[
-                    (chrom_id, int(orf_start), int(orf_end), strand, orf["Seq"], orf_blocks)] = [
+
+                orf_key = (chrom_id, int(orf_start), int(orf_end), strand, orf["Seq"], orf_blocks)
+                if orf_key not in ribotish_result_quick_check:
+                    ribotish_result_quick_check[orf_key] = []
+                ribotish_result_quick_check[orf_key].append([
                     orf["Gid"],
                     orf["Tid"],
                     orf["TisType"],
-                    log_score]
+                    log_score])
         return ribotish_result_quick_check
     
 
@@ -236,12 +243,15 @@ class price_result_processor(orf_result_processor):
                     orf_sequence = str((Seq(orf_sequence)).reverse_complement())
                 
                 log_score = -math.log10(float(orf["p value"])) if float(orf["p value"]) != 0 else 999
-                price_result_quick_check[
-                    (chrom_id, int(orf_start), int(orf_end), strand, orf_sequence, start_end_list)] = [
+
+                orf_key = (chrom_id, int(orf_start), int(orf_end), strand, orf_sequence, start_end_list)
+                if orf_key not in price_result_quick_check:
+                    price_result_quick_check[orf_key] = []
+                price_result_quick_check[orf_key].append([
                         orf["Gene"],
                         tid,
                         orf_type,
-                        log_score]
+                        log_score])
         return price_result_quick_check
 
 
@@ -261,16 +271,18 @@ class orfquant_result_processor(orf_result_processor):
         orfquant_result_quick_check = {}        
         for _, orf in pd.read_csv(self.orf_result_file).iterrows():            
             orf_tstart = orf["start"] - 1
-            orf_tstop = orf["end"]
+            orf_tstop = orf["end"] + 3
             orf_blocks, orf_sequence, orf_start, orf_end = self._get_block_info(
                 transcript_coordinates[orf["transcript_id"]], orf_tstart, orf_tstop, ref_sequences)
             
             log_score = -math.log10(orf["pval"]) if orf["pval"] != 0 else 999
-            orfquant_result_quick_check[
-                (orf["region.seqnames"], orf_start, orf_end, orf["region.strand"], orf_sequence, orf_blocks)] = [
+            orf_key = (orf["region.seqnames"], orf_start, orf_end, orf["region.strand"], orf_sequence, orf_blocks)
+            if orf_key not in orfquant_result_quick_check:
+                orfquant_result_quick_check[orf_key] = []
+            orfquant_result_quick_check[orf_key].append([
                     orf["gene_id"],
                     orf["transcript_id"],
                     orf["ORF_category_Tx"],
-                    log_score]
+                    log_score])
         return orfquant_result_quick_check
 

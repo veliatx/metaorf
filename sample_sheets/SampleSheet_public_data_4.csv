@@ -1,0 +1,169 @@
+[Samples],,,,,,,
+experiment_id,sample_id,organism,R1_fastq_file,containing_folder,adaptor_sequence,umi,rna_seq_name
+SRX24839401,SRX24839401,human,SRX24839401_SRR29322954_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839402,SRX24839402,human,SRX24839402_SRR29322953_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839403,SRX24839403,human,SRX24839403_SRR29322952_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839404,SRX24839404,human,SRX24839404_SRR29322951_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839405,SRX24839405,human,SRX24839405_SRR29322950_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839406,SRX24839406,human,SRX24839406_SRR29322949_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839407,SRX24839407,human,SRX24839407_SRR29322948_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839408,SRX24839408,human,SRX24839408_SRR29322947_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839409,SRX24839409,human,SRX24839409_SRR29322946_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839410,SRX24839410,human,SRX24839410_SRR29322945_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839411,SRX24839411,human,SRX24839411_SRR29322944_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839412,SRX24839412,human,SRX24839412_SRR29322943_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839417,SRX24839417,human,SRX24839417_SRR29323012_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839418,SRX24839418,human,SRX24839418_SRR29323011_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839419,SRX24839419,human,SRX24839419_SRR29323010_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839420,SRX24839420,human,SRX24839420_SRR29323009_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839421,SRX24839421,human,SRX24839421_SRR29323008_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839422,SRX24839422,human,SRX24839422_SRR29323007_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839423,SRX24839423,human,SRX24839423_SRR29323006_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839424,SRX24839424,human,SRX24839424_SRR29323005_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839425,SRX24839425,human,SRX24839425_SRR29323004_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839426,SRX24839426,human,SRX24839426_SRR29323003_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839427,SRX24839427,human,SRX24839427_SRR29323002_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839428,SRX24839428,human,SRX24839428_SRR29323001_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839429,SRX24839429,human,SRX24839429_SRR29323000_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839430,SRX24839430,human,SRX24839430_SRR29322999_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839431,SRX24839431,human,SRX24839431_SRR29322998_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839432,SRX24839432,human,SRX24839432_SRR29322997_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839433,SRX24839433,human,SRX24839433_SRR29322996_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839434,SRX24839434,human,SRX24839434_SRR29322995_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839435,SRX24839435,human,SRX24839435_SRR29322994_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839436,SRX24839436,human,SRX24839436_SRR29322993_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839437,SRX24839437,human,SRX24839437_SRR29322992_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839438,SRX24839438,human,SRX24839438_SRR29322991_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839439,SRX24839439,human,SRX24839439_SRR29322990_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839440,SRX24839440,human,SRX24839440_SRR29322989_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839441,SRX24839441,human,SRX24839441_SRR29322988_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839442,SRX24839442,human,SRX24839442_SRR29322987_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839443,SRX24839443,human,SRX24839443_SRR29322986_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839444,SRX24839444,human,SRX24839444_SRR29322985_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839445,SRX24839445,human,SRX24839445_SRR29322984_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839446,SRX24839446,human,SRX24839446_SRR29322983_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839447,SRX24839447,human,SRX24839447_SRR29322982_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839448,SRX24839448,human,SRX24839448_SRR29322981_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839449,SRX24839449,human,SRX24839449_SRR29322980_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839450,SRX24839450,human,SRX24839450_SRR29322979_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839451,SRX24839451,human,SRX24839451_SRR29322978_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839452,SRX24839452,human,SRX24839452_SRR29322977_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839453,SRX24839453,human,SRX24839453_SRR29322976_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839454,SRX24839454,human,SRX24839454_SRR29322975_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839455,SRX24839455,human,SRX24839455_SRR29322974_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839456,SRX24839456,human,SRX24839456_SRR29322973_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839457,SRX24839457,human,SRX24839457_SRR29322972_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839458,SRX24839458,human,SRX24839458_SRR29322971_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839459,SRX24839459,human,SRX24839459_SRR29322970_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839460,SRX24839460,human,SRX24839460_SRR29322969_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839461,SRX24839461,human,SRX24839461_SRR29322968_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24839462,SRX24839462,human,SRX24839462_SRR29322967_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839463,SRX24839463,human,SRX24839463_SRR29322966_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839464,SRX24839464,human,SRX24839464_SRR29322965_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839465,SRX24839465,human,SRX24839465_SRR29322964_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839466,SRX24839466,human,SRX24839466_SRR29322963_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839467,SRX24839467,human,SRX24839467_SRR29322962_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839468,SRX24839468,human,SRX24839468_SRR29322961_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839469,SRX24839469,human,SRX24839469_SRR29322960_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24839470,SRX24839470,human,SRX24839470_SRR29322959_1.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24842121,SRX24842121,human,SRX24842121_SRR29325970.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842122,SRX24842122,human,SRX24842122_SRR29325969.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842123,SRX24842123,human,SRX24842123_SRR29325968.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842124,SRX24842124,human,SRX24842124_SRR29325967.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842125,SRX24842125,human,SRX24842125_SRR29325966.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842126,SRX24842126,human,SRX24842126_SRR29325965.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842127,SRX24842127,human,SRX24842127_SRR29325964.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24842128,SRX24842128,human,SRX24842128_SRR29325963.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843296,SRX24843296,human,SRX24843296_SRR29327153.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843297,SRX24843297,human,SRX24843297_SRR29327152.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843298,SRX24843298,human,SRX24843298_SRR29327151.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843299,SRX24843299,human,SRX24843299_SRR29327150.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843300,SRX24843300,human,SRX24843300_SRR29327149.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843301,SRX24843301,human,SRX24843301_SRR29327148.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,CCLE_CACO2_LARGE_INTESTINE
+SRX24843302,SRX24843302,human,SRX24843302_SRR29327147.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+SRX24843303,SRX24843303,human,SRX24843303_SRR29327146.fastq.gz,s3://velia-piperuns-dev/riboseq_files/oct23_2024/,AGATCGGAAGAGCACACGTCTGAA,,PBMC_ctrl
+,,,,,,,
+[Riboseq_jobs],,,,,,,
+CHX,TIS,Note,,,,,
+SRX24839401,,"Illumina HiSeq 4000 sequencing: GSM8314016: Caco-2, differentiated, control, rep1 Homo sapiens RNA-Seq",,,,,
+SRX24839402,,"Illumina HiSeq 4000 sequencing: GSM8314017: Caco-2, differentiated, control, rep2 Homo sapiens RNA-Seq",,,,,
+SRX24839403,,"Illumina HiSeq 4000 sequencing: GSM8314018: Caco-2, differentiated, control, rep3 Homo sapiens RNA-Seq",,,,,
+SRX24839404,,"Illumina HiSeq 4000 sequencing: GSM8314019: Caco-2, differentiated, lipid micelles, rep1 Homo sapiens RNA-Seq",,,,,
+SRX24839405,,"Illumina HiSeq 4000 sequencing: GSM8314020: Caco-2, differentiated, lipid micelles, rep2 Homo sapiens RNA-Seq",,,,,
+SRX24839406,,"Illumina HiSeq 4000 sequencing: GSM8314021: Caco-2, differentiated, lipid micelles, rep3 Homo sapiens RNA-Seq",,,,,
+SRX24839407,,"Illumina HiSeq 4000 sequencing: GSM8314022: Caco-2, differentiated, micelles without lipid, rep1 Homo sapiens RNA-Seq",,,,,
+SRX24839408,,"Illumina HiSeq 4000 sequencing: GSM8314023: Caco-2, differentiated, micelles without lipid, rep2 Homo sapiens RNA-Seq",,,,,
+SRX24839409,,"Illumina HiSeq 4000 sequencing: GSM8314024: Caco-2, differentiated, micelles without lipid, rep3 Homo sapiens RNA-Seq",,,,,
+SRX24839410,,"Illumina HiSeq 4000 sequencing: GSM8314025: Caco-2, undifferentiated, rep1 Homo sapiens RNA-Seq",,,,,
+SRX24839411,,"Illumina HiSeq 4000 sequencing: GSM8314026: Caco-2, undifferentiated, rep2 Homo sapiens RNA-Seq",,,,,
+SRX24839412,,"Illumina HiSeq 4000 sequencing: GSM8314027: Caco-2, undifferentiated, rep3 Homo sapiens RNA-Seq",,,,,
+SRX24839417,,Illumina NovaSeq 6000 sequencing: GSM8314050: HCEC-1CT Naive 1 Homo sapiens RNA-Seq,,,,,
+SRX24839418,,Illumina NovaSeq 6000 sequencing: GSM8314051: HCEC-1CT Naive 2 Homo sapiens RNA-Seq,,,,,
+SRX24839419,,Illumina NovaSeq 6000 sequencing: GSM8314052: HCEC-1CT Naive 3 Homo sapiens RNA-Seq,,,,,
+SRX24839420,,Illumina NovaSeq 6000 sequencing: GSM8314053: HCEC-1CT 100 ng/mL LPS 1 Homo sapiens RNA-Seq,,,,,
+SRX24839421,,Illumina NovaSeq 6000 sequencing: GSM8314054: HCEC-1CT 100 ng/mL LPS 2 Homo sapiens RNA-Seq,,,,,
+SRX24839422,,Illumina NovaSeq 6000 sequencing: GSM8314055: HCEC-1CT 100 ng/mL LPS 3 Homo sapiens RNA-Seq,,,,,
+SRX24839423,,Illumina NovaSeq 6000 sequencing: GSM8314056: HCEC-1CT 10 ng/mL IL-22 1 Homo sapiens RNA-Seq,,,,,
+SRX24839424,,Illumina NovaSeq 6000 sequencing: GSM8314057: HCEC-1CT 10 ng/mL IL-22 2 Homo sapiens RNA-Seq,,,,,
+SRX24839425,,Illumina NovaSeq 6000 sequencing: GSM8314058: HCEC-1CT 10 ng/mL IL-22 3 Homo sapiens RNA-Seq,,,,,
+SRX24839426,,Illumina NovaSeq 6000 sequencing: GSM8314059: HCEC-1CT 10 ng/mL TNFa 1 Homo sapiens RNA-Seq,,,,,
+SRX24839427,,Illumina NovaSeq 6000 sequencing: GSM8314060: HCEC-1CT 10 ng/mL TNFa 2 Homo sapiens RNA-Seq,,,,,
+SRX24839428,,Illumina NovaSeq 6000 sequencing: GSM8314061: HCEC-1CT 10 ng/mL TNFa 3 Homo sapiens RNA-Seq,,,,,
+SRX24839429,,Illumina NovaSeq 6000 sequencing: GSM8314062: HCEC-1CT 10 ng/mL IFNg 1 Homo sapiens RNA-Seq,,,,,
+SRX24839430,,Illumina NovaSeq 6000 sequencing: GSM8314063: HCEC-1CT 10 ng/mL IFNg 2 Homo sapiens RNA-Seq,,,,,
+SRX24839431,,Illumina NovaSeq 6000 sequencing: GSM8314064: HCEC-1CT 10 ng/mL IFNg 3 Homo sapiens RNA-Seq,,,,,
+SRX24839432,,Illumina NovaSeq 6000 sequencing: GSM8314065: Caco-2 Naive 1 Homo sapiens RNA-Seq,,,,,
+SRX24839433,,Illumina NovaSeq 6000 sequencing: GSM8314066: Caco-2 Naive 2 Homo sapiens RNA-Seq,,,,,
+SRX24839434,,Illumina NovaSeq 6000 sequencing: GSM8314067: Caco-2 Naive 3 Homo sapiens RNA-Seq,,,,,
+SRX24839435,,Illumina NovaSeq 6000 sequencing: GSM8314068: Caco-2 100 ng/mL LPS 1 Homo sapiens RNA-Seq,,,,,
+SRX24839436,,Illumina NovaSeq 6000 sequencing: GSM8314069: Caco-2 100 ng/mL LPS 2 Homo sapiens RNA-Seq,,,,,
+SRX24839437,,Illumina NovaSeq 6000 sequencing: GSM8314070: Caco-2 100 ng/mL LPS 3 Homo sapiens RNA-Seq,,,,,
+SRX24839438,,Illumina NovaSeq 6000 sequencing: GSM8314071: Caco-2 10 ng/mL IL-22 1 Homo sapiens RNA-Seq,,,,,
+SRX24839439,,Illumina NovaSeq 6000 sequencing: GSM8314072: Caco-2 10 ng/mL IL-22 2 Homo sapiens RNA-Seq,,,,,
+SRX24839440,,Illumina NovaSeq 6000 sequencing: GSM8314073: Caco-2 10 ng/mL IL-22 3 Homo sapiens RNA-Seq,,,,,
+SRX24839441,,Illumina NovaSeq 6000 sequencing: GSM8314074: Caco-2 10 ng/mL TNFa 1 Homo sapiens RNA-Seq,,,,,
+SRX24839442,,Illumina NovaSeq 6000 sequencing: GSM8314075: Caco-2 10 ng/mL TNFa 2 Homo sapiens RNA-Seq,,,,,
+SRX24839443,,Illumina NovaSeq 6000 sequencing: GSM8314076: Caco-2 10 ng/mL TNFa 3 Homo sapiens RNA-Seq,,,,,
+SRX24839444,,Illumina NovaSeq 6000 sequencing: GSM8314077: Caco-2 10 ng/mL IFNg 1 Homo sapiens RNA-Seq,,,,,
+SRX24839445,,Illumina NovaSeq 6000 sequencing: GSM8314078: Caco-2 10 ng/mL IFNg 2 Homo sapiens RNA-Seq,,,,,
+SRX24839446,,Illumina NovaSeq 6000 sequencing: GSM8314079: Caco-2 10 ng/mL IFNg 3 Homo sapiens RNA-Seq,,,,,
+SRX24839447,,Illumina NovaSeq 6000 sequencing: GSM8314080: CCD-18Co Naive 1 Homo sapiens RNA-Seq,,,,,
+SRX24839448,,Illumina NovaSeq 6000 sequencing: GSM8314081: CCD-18Co Naive 2 Homo sapiens RNA-Seq,,,,,
+SRX24839449,,Illumina NovaSeq 6000 sequencing: GSM8314082: CCD-18Co Naive 3 Homo sapiens RNA-Seq,,,,,
+SRX24839450,,Illumina NovaSeq 6000 sequencing: GSM8314083: CCD-18Co 10 ng/mL TNFa 1 Homo sapiens RNA-Seq,,,,,
+SRX24839451,,Illumina NovaSeq 6000 sequencing: GSM8314084: CCD-18Co 10 ng/mL TNFa 2 Homo sapiens RNA-Seq,,,,,
+SRX24839452,,Illumina NovaSeq 6000 sequencing: GSM8314085: CCD-18Co 10 ng/mL TNFa 3 Homo sapiens RNA-Seq,,,,,
+SRX24839453,,Illumina NovaSeq 6000 sequencing: GSM8314086: CCD-18Co 10 ng/mL IL-1b 1 Homo sapiens RNA-Seq,,,,,
+SRX24839454,,Illumina NovaSeq 6000 sequencing: GSM8314087: CCD-18Co 10 ng/mL IL-1b 2 Homo sapiens RNA-Seq,,,,,
+SRX24839455,,Illumina NovaSeq 6000 sequencing: GSM8314088: CCD-18Co 10 ng/mL IL-1b 3 Homo sapiens RNA-Seq,,,,,
+SRX24839456,,Illumina NovaSeq 6000 sequencing: GSM8314089: CCD-18Co 10 ng/mL OSM 1 Homo sapiens RNA-Seq,,,,,
+SRX24839457,,Illumina NovaSeq 6000 sequencing: GSM8314090: CCD-18Co 10 ng/mL OSM 2 Homo sapiens RNA-Seq,,,,,
+SRX24839458,,Illumina NovaSeq 6000 sequencing: GSM8314091: CCD-18Co 10 ng/mL OSM 3 Homo sapiens RNA-Seq,,,,,
+SRX24839459,,Illumina NovaSeq 6000 sequencing: GSM8314092: CCD-18Co 10 ng/mL TGFb 1 Homo sapiens RNA-Seq,,,,,
+SRX24839460,,Illumina NovaSeq 6000 sequencing: GSM8314093: CCD-18Co 10 ng/mL TGFb 2 Homo sapiens RNA-Seq,,,,,
+SRX24839461,,Illumina NovaSeq 6000 sequencing: GSM8314094: CCD-18Co 10 ng/mL TGFb 3 Homo sapiens RNA-Seq,,,,,
+SRX24839462,,Illumina NovaSeq 6000 sequencing: GSM8314095: PBMC Naive 1 Homo sapiens RNA-Seq,,,,,
+SRX24839463,,Illumina NovaSeq 6000 sequencing: GSM8314096: PBMC Naive 2 Homo sapiens RNA-Seq,,,,,
+SRX24839464,,Illumina NovaSeq 6000 sequencing: GSM8314097: PBMC Naive 3 Homo sapiens RNA-Seq,,,,,
+SRX24839465,,Illumina NovaSeq 6000 sequencing: GSM8314098: PBMC anti-CD3/CD28 1 Homo sapiens RNA-Seq,,,,,
+SRX24839466,,Illumina NovaSeq 6000 sequencing: GSM8314099: PBMC anti-CD3/CD28 2 Homo sapiens RNA-Seq,,,,,
+SRX24839467,,Illumina NovaSeq 6000 sequencing: GSM8314100: PBMC anti-CD3/CD28 3 Homo sapiens RNA-Seq,,,,,
+SRX24839468,,Illumina NovaSeq 6000 sequencing: GSM8314101: PBMC LPS 1 Homo sapiens RNA-Seq,,,,,
+SRX24839469,,Illumina NovaSeq 6000 sequencing: GSM8314102: PBMC LPS 2 Homo sapiens RNA-Seq,,,,,
+SRX24839470,,Illumina NovaSeq 6000 sequencing: GSM8314103: PBMC LPS 3 Homo sapiens RNA-Seq,,,,,
+SRX24842121,,"Illumina HiSeq 4000 sequencing: GSM8314000: Caco-2, differentiated, lipid micelles, rep1 Homo sapiens OTHER",,,,,
+SRX24842122,,"Illumina HiSeq 4000 sequencing: GSM8314001: Caco-2, differentiated, lipid micelles, rep2 Homo sapiens OTHER",,,,,
+SRX24842123,,"Illumina HiSeq 4000 sequencing: GSM8314002: Caco-2, differentiated, micelles without lipid, rep1 Homo sapiens OTHER",,,,,
+SRX24842124,,"Illumina HiSeq 4000 sequencing: GSM8314003: Caco-2, differentiated, micelles without lipid, rep2 Homo sapiens OTHER",,,,,
+SRX24842125,,"Illumina HiSeq 4000 sequencing: GSM8314004: Caco-2, differentiated, control, rep1 Homo sapiens OTHER",,,,,
+SRX24842126,,"Illumina HiSeq 4000 sequencing: GSM8314005: Caco-2, differentiated, control, rep2 Homo sapiens OTHER",,,,,
+SRX24842127,,"Illumina HiSeq 4000 sequencing: GSM8314006: Caco-2, undifferentiated, rep1 Homo sapiens OTHER",,,,,
+SRX24842128,,"Illumina HiSeq 4000 sequencing: GSM8314007: Caco-2, undifferentiated, rep2 Homo sapiens OTHER",,,,,
+SRX24843296,,Illumina HiSeq 4000 sequencing: GSM8314008: HCEC-1CT pool1 Homo sapiens OTHER,,,,,
+SRX24843297,,Illumina HiSeq 4000 sequencing: GSM8314009: HCEC-1CT pool2 Homo sapiens OTHER,,,,,
+SRX24843298,,Illumina HiSeq 4000 sequencing: GSM8314010: CCD-18Co pool1 Homo sapiens OTHER,,,,,
+SRX24843299,,Illumina HiSeq 4000 sequencing: GSM8314011: CCD-18Co pool2 Homo sapiens OTHER,,,,,
+SRX24843300,,Illumina HiSeq 4000 sequencing: GSM8314012: Caco-2 pool1 Homo sapiens OTHER,,,,,
+SRX24843301,,Illumina HiSeq 4000 sequencing: GSM8314013: Caco-2 pool2 Homo sapiens OTHER,,,,,
+SRX24843302,,Illumina HiSeq 4000 sequencing: GSM8314014: PBMC pool1 Homo sapiens OTHER,,,,,
+SRX24843303,,Illumina HiSeq 4000 sequencing: GSM8314015: PBMC pool2 Homo sapiens OTHER,,,,,

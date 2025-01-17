@@ -173,6 +173,7 @@ def load_truth_datasets(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'M
         #feature_df = feature_df.groupby('orf_idx_str').mean()
         
         merged_df = feature_df.merge(truth_df[['orf_id', truth_label]], left_on='orf_idx_str', right_on='orf_id')
+        merged_df = merged_df[merged_df[truth_label].isin([0, 2, 3])]
         merged_df.reset_index(inplace=True)
 
         y = merged_df[truth_label].copy()
@@ -180,6 +181,66 @@ def load_truth_datasets(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'M
         y = y.values
 
         drop_cols = ['orf_id', 'orf_idx_str', truth_label, 'index']
+        numeric_feat_df = merged_df.drop(columns=drop_cols)
+        X = numeric_feat_df
+
+        X_dfs.append(X)
+        y_arrays.append(y)
+        orf_ids.append(merged_df['orf_id'])
+
+        datasets[dataset_name] = Dataset(X, y, dataset_name, merged_df['orf_id'])
+
+    datasets['all'] = Dataset(pd.concat(X_dfs), np.concatenate(y_arrays), 'all',  pd.concat(orf_ids))
+    datasets['all'].X.reset_index(inplace=True, drop=True)
+
+    with open(data_dir.joinpath('datasets.pkl'), 'wb') as file:
+        pickle.dump(datasets, file)
+
+    return datasets
+
+
+def load_truth_datasets_avg(truth_df, data_dir, overwrite, dataset_names=['iPSC', 'MB1', 'Gaertner']):
+    """
+    """
+    datasets = {}
+
+    X_dfs = []
+    y_arrays = []
+    orf_ids = []
+
+    if not overwrite and data_dir.joinpath('datasets.pkl').exists():
+        with open(data_dir.joinpath('datasets.pkl'), 'rb') as file:
+            datasets = pickle.load(file)
+            return datasets
+
+    for dataset_name in dataset_names:
+        dataset_file_names = []
+        with open(data_dir.joinpath(f'{dataset_name}.txt'), 'r') as infile:
+            for line in infile.readlines():
+                exp_name = line.rstrip('\n')
+                dataset_file_names.append(f"{exp_name}_orf_features.csv")
+
+        truth_label = f'score.({dataset_name})'
+        feature_df = load_features(data_dir, dataset_file_names)
+
+        #drop_cols = ['chrom_id', 'orf_start', 'orf_end', 'strand', 'exon_blocks', 'dataset',
+        #             'orf_sequence']
+        drop_cols = ['orf_start', 'orf_end', 'strand', 'exon_blocks', 'dataset', 'orf_sequence']
+        feature_df = feature_df.drop(columns=drop_cols)
+        feature_df = feature_df.groupby('orf_idx_str').mean(numeric_only=True).merge(
+            feature_df[["orf_idx_str", "chrom_id"]].drop_duplicates().set_index("orf_idx_str"),
+            left_index=True, right_index=True
+        )
+        
+        merged_df = feature_df.merge(truth_df[['orf_id', truth_label]], left_index=True, right_on='orf_id')
+        merged_df = merged_df[merged_df[truth_label].isin([0, 2, 3])]
+        merged_df.reset_index(inplace=True)
+
+        y = merged_df[truth_label].copy()
+        y[y > 0] = 1
+        y = y.values
+
+        drop_cols = ['orf_id', truth_label, 'index']
         numeric_feat_df = merged_df.drop(columns=drop_cols)
         X = numeric_feat_df
 

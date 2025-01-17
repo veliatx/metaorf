@@ -20,7 +20,8 @@ def parse_arg_array(array_in_string_form):
 
 
 def main(annotation_dir, output_dir, experiment_name, genome_annotation_prefix,
-         reference_genomes, fastq_tis_files, bam_tis_files, orf_callers):
+         reference_genomes, fastq_tis_files, bam_tis_files, orf_callers, organism,
+         transcript_list_file, rna_seq_name, transcript_tpm_threshold):
     reference_fasta = [Path(f'{annotation_dir}/genomes/{genome_file}').as_posix()
                        for genome_file in reference_genomes]
     trim_reads_to_psites.trim_reads_to_psites_main(
@@ -39,13 +40,19 @@ def main(annotation_dir, output_dir, experiment_name, genome_annotation_prefix,
         experiment_name=experiment_name,
         transcript_bed_file=Path(f'{annotation_dir}/annotations/{genome_annotation_prefix}.bed'), 
         reference_fasta=reference_fasta,
-        orf_callers=orf_callers)
+        orf_callers=orf_callers,
+        transcript_list_file=Path(f'{annotation_dir}/annotations/{transcript_list_file}'),
+        rna_seq_name=rna_seq_name,
+        transcript_tpm_threshold=transcript_tpm_threshold)
 
     generate_features.generate_features_main(
         experiment_name=experiment_name,
         data_dir=output_dir,
         transcript_bed_file=Path(f'{annotation_dir}/annotations/{genome_annotation_prefix}.bed'), 
-        callers=orf_callers)
+        tis_transformer_file=Path(f'{annotation_dir}/tis_transformer/tis_transformer_predictions.{genome_annotation_prefix}.txt'),
+        callers=orf_callers,
+        organism=organism,
+        qc_file=Path(f'{output_dir}/aligned/{experiment_name}_qc.tsv'))
     print("Data post-processing has completed.")
 
 
@@ -69,6 +76,16 @@ if __name__ == '__main__':
                               'if no TIS file is used. Default: %(default)s'))
     parser.add_argument('--callers', type=str, default=None,
                         help=('Names of the callers being used. Default: %(default)s'))
+    parser.add_argument('--organism', type=str, default="human",
+                        help=('Organism name of the samples being used. Default: %(default)s'))
+    parser.add_argument('--transcript_list_file', type=str, default=None,
+                        help=('List of transcript activities in diffrent RNA-seq experiments. Default: %(default)s'))
+    parser.add_argument('--rna_seq_name', type=str, default=None,
+                        help=('Name of the RNA-seq experiment correspounding to the ribo-seq experiment. '
+                              'Default: %(default)s'))
+    parser.add_argument('--transcript_tpm_threshold', type=float, default=0.1,
+                        help=('The TPM threshold for qualified transcripts. '
+                              'Default: %(default)s'))
     args = parser.parse_args()
 
     main(annotation_dir=Path(args.annotation_dir),
@@ -78,4 +95,8 @@ if __name__ == '__main__':
          reference_genomes=parse_arg_array(args.reference_genomes),
          fastq_tis_files=parse_arg_array(args.fastq_tis_files),
          bam_tis_files=parse_arg_array(args.bam_tis_files),
-         orf_callers=parse_arg_array(args.callers))
+         orf_callers=parse_arg_array(args.callers),
+         organism=args.organism,
+         transcript_list_file=args.transcript_list_file,
+         rna_seq_name=args.rna_seq_name,
+         transcript_tpm_threshold=args.transcript_tpm_threshold)
