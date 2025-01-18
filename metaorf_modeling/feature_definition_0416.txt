@@ -1,0 +1,68 @@
+# coverage
+sum:	the total number of reads (more specifically, psites of reads) mapped to each ORF (-log10)
+mean:	sum divided by the length of each ORF (-log10)
+std:	the standard deviation of psite counts across locations within each ORF (i.e. the degree of psites distribution)
+n_reads_orf_vs_genome:	the ratio of reads falling inside the ORF region vs the total number of reads falling in the genomic region between the start and end of the ORF
+pos_1_vs_0:
+pos_2_vs_0:	the ratio of #psites falling on the second/third position of an ORF vs the first position
+frames_1_vs_0:
+frames_2_vs_0:	the ratio of #psites falling in the frame 1/2 vs frame 0 (i.e. the start codon frame)
+periodicity_first_60_1_vs_0
+periodicity_first_60_2_vs_0:	same as above, except for the 60bp region after the start codon
+periodicity_last_60_1_vs_0
+periodicity_last_60_2_vs_0:	same as above, except for the 60bp region before the stop codon
+n_empty_codons:		codons w/o any psite coverage (-log10)
+longest_empty_length_whole:	the longest subsequence inside the orf w/o any coverage (-log10)
+longest_empty_length_first_30:	same as above, except for the first 30bp region after the start codon (-log10)
+longest_empty_length_last_30:	same as above, except for the 30bp region before the stop codon (-log10)
+
+
+
+# signal drop
+## Here we use the psite coverages within different regions for calculation. In each group, we have two values to report, mean and max. The calculation of the "mean" values uses the average coverage values within the specified regions while the calculation of the "max" values only uses the coverage at a single location within each region where the coverage is the highest. The signal drops are presented as -log10(drop_value) and capped at -3 and 3.
+
+five_utr_vs_cds_mean: 
+five_utr_vs_cds_max: five_utr -> 60 bp before the start codon, cds -> 60 bp at and after the start codon
+
+five_utr_vs_start_codon_mean
+five_utr_vs_start_codon_max: start_codon -> 9 bp region with the start codon as the center
+
+cds_utr_vs_start_codon_mean
+cds_utr_vs_start_codon_max: same as above
+
+three_utr_vs_cds_mean
+three_utr_vs_cds_max: three_utr -> 60 bp after the stop codon, cds -> 60 bp at and before the stop codon
+
+three_utr_vs_stop_codon_mean
+three_utr_vs_stop_codon_max: stop_codon -> 3 bp before the stop codon
+
+cds_utr_vs_stop_codon_mean 
+cds_utr_vs_stop_codon_max: same as above
+
+
+# 3' and 5' UTR
+dist_neg_100
+dist_neg_150 
+dist_pos_100
+dist_pos_150: distance of the nearest peak that is 100% (or 150%) in the upstream (neg) and downstream (pos) of the start codon (-log10)
+
+five_utr_periodicity: the ratio of coverage of psites for frame 1 and 2 against frame 0 for the 30bp 5'UTR region before the start codon
+five_utr_in_frame_bins: the number of 3-bp bins with the first position with the highest coverage
+three_utr_periodicity: 
+three_utr_in_frame_bins: same as above, except for the 30bp 3'UTR region after the stop codon
+
+
+
+# ORF caller scores
+price:		-log10 pvalue
+ribotish:	-log10 pvalue
+ribocode:	-log10 pvalue
+tis_transformer_score:	score ranging between 0 to 1
+
+
+
+# QC for the dataset
+size_peak_frac:
+size_gini:
+periodicity_score: features computed by ORfik for the dataset. All the ORFs in the same dataset share the same feature values.
+
