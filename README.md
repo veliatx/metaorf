@@ -32,3 +32,6 @@ Once the datasets are ready, use the scripts in the `metaorf_modeling` folder to
 * 00_merge_orfs.ipynb: Merges ORF candidates from all experiments into a single table in CSV format.
 * 01_truthset_eval.ipynb: Loads the truth set and trains a gradient boosting model for ORF prioritization.
 * 02_predict_ensemble.ipynb: Makes inferences and evaluates the confidence of ORF calls.
+
+## License
+MetaORF is licensed under the MIT License. See the LICENSE file for more details.
