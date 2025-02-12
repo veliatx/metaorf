@@ -43,21 +43,24 @@ class Job:
         self.command_list = command_list
 
 
-    def submit(self, dependencies):
+    def submit(self, dependencies, run_locally=False):
         """"""
         job_id_list = []
         for command in self.command_list:
             command = [str(c) for c in command]
-            response = boto3.client('batch', 'us-west-2').submit_job(
-                jobName = self.params['jobName'],
-                jobQueue = self.params['jobQueue'],
-                jobDefinition = self.params['jobDefinition'],
-                containerOverrides = {
-                    'command': command,
-                },
-                dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in dependencies],
-            )
-            job_id_list.append(response['jobId'])
+            if run_locally:
+                command = print(''.join(command))
+            else:
+                response = boto3.client('batch', 'us-west-2').submit_job(
+                    jobName = self.params['jobName'],
+                    jobQueue = self.params['jobQueue'],
+                    jobDefinition = self.params['jobDefinition'],
+                    containerOverrides = {
+                        'command': command,
+                    },
+                    dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in dependencies],
+                )
+                job_id_list.append(response['jobId'])
 
         return job_id_list
 

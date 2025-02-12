@@ -82,7 +82,7 @@ def compress_fastq(sample_list, input_dir):
                 os.system(cmd_compress)
             except:
                 raise RuntimeError(
-                        f'A error occurs when compressing fastq files.') 
+                        f'A error occurs when compressing fastq files.')
             compressed_samples.append(sample+'.gz')
     return compressed_samples
 
