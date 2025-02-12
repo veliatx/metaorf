@@ -1,0 +1,90 @@
+[I 2023-06-07 18:04:09.308 ServerApp] jupyterlab | extension was successfully linked.
+[W 2023-06-07 18:04:09.311 NotebookApp] 'certfile' has moved from NotebookApp to ServerApp. This config will be passed to ServerApp. Be sure to update your config before our next release.
+[W 2023-06-07 18:04:09.311 NotebookApp] 'ip' has moved from NotebookApp to ServerApp. This config will be passed to ServerApp. Be sure to update your config before our next release.
+[W 2023-06-07 18:04:09.311 NotebookApp] 'keyfile' has moved from NotebookApp to ServerApp. This config will be passed to ServerApp. Be sure to update your config before our next release.
+[I 2023-06-07 18:04:09.313 ServerApp] nbclassic | extension was successfully linked.
+[I 2023-06-07 18:04:09.904 ServerApp] notebook_shim | extension was successfully linked.
+[I 2023-06-07 18:04:09.934 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2023-06-07 18:04:09.934 LabApp] JupyterLab extension loaded from /home/ec2-user/miniconda3/lib/python3.10/site-packages/jupyterlab
+[I 2023-06-07 18:04:09.934 LabApp] JupyterLab application directory is /home/ec2-user/miniconda3/share/jupyter/lab
+[I 2023-06-07 18:04:09.938 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2023-06-07 18:04:09.947 ServerApp] nbclassic | extension was successfully loaded.
+[I 2023-06-07 18:04:09.948 ServerApp] Serving notebooks from local directory: /home/ec2-user/bfx-containers/riboseq_callers/ORFrater/ORF-RATER
+[I 2023-06-07 18:04:09.948 ServerApp] Jupyter Server 1.23.4 is running at:
+[I 2023-06-07 18:04:09.948 ServerApp] https://localhost:8888/lab
+[I 2023-06-07 18:04:09.948 ServerApp]  or https://127.0.0.1:8888/lab
+[I 2023-06-07 18:04:09.948 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[W 2023-06-07 18:04:09.954 ServerApp] No web browser found: could not locate runnable browser.
+[W 2023-06-07 18:04:17.930 ServerApp] SSL Error on 8 ('10.70.0.224', 59592): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:17.930 ServerApp] SSL Error on 9 ('10.70.0.224', 59593): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:18.364 ServerApp] SSL Error on 10 ('10.70.0.224', 59595): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:18.365 ServerApp] SSL Error on 11 ('10.70.0.224', 59596): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:18.366 ServerApp] SSL Error on 12 ('10.70.0.224', 59598): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:18.368 ServerApp] SSL Error on 13 ('10.70.0.224', 59597): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:18.369 ServerApp] SSL Error on 14 ('10.70.0.224', 59599): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:21.182 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2023-06-07 18:04:21.667 ServerApp] 404 GET /api/contents/Untitled.ipynb?content=0&1686161061612 (10.70.0.224): file or directory does not exist: 'Untitled.ipynb'
+[W 2023-06-07 18:04:21.667 ServerApp] wrote error: "file or directory does not exist: 'Untitled.ipynb'"
+[W 2023-06-07 18:04:21.668 ServerApp] 404 GET /api/contents/Untitled.ipynb?content=0&1686161061612 (10.70.0.224) 5.09ms referer=https://10.65.24.89:8888/lab
+[W 2023-06-07 18:04:21.694 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling/train_model.ipynb?content=0&1686161061613 (10.70.0.224): file or directory does not exist: 'bfx-containers/protein_function_modeling/train_model.ipynb'
+[W 2023-06-07 18:04:21.695 ServerApp] wrote error: "file or directory does not exist: 'bfx-containers/protein_function_modeling/train_model.ipynb'"
+[W 2023-06-07 18:04:21.695 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling/train_model.ipynb?content=0&1686161061613 (10.70.0.224) 1.08ms referer=https://10.65.24.89:8888/lab
+[W 2023-06-07 18:04:21.706 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling/view_protein_data.ipynb?content=0&1686161061614 (10.70.0.224): file or directory does not exist: 'bfx-containers/protein_function_modeling/view_protein_data.ipynb'
+[W 2023-06-07 18:04:21.709 ServerApp] wrote error: "file or directory does not exist: 'bfx-containers/protein_function_modeling/view_protein_data.ipynb'"
+[W 2023-06-07 18:04:21.709 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling/view_protein_data.ipynb?content=0&1686161061614 (10.70.0.224) 3.35ms referer=https://10.65.24.89:8888/lab
+[W 2023-06-07 18:04:21.710 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling/src/train_mean_rep_MLP.py?content=0&1686161061614 (10.70.0.224): file or directory does not exist: 'bfx-containers/protein_function_modeling/src/train_mean_rep_MLP.py'
+[W 2023-06-07 18:04:21.710 ServerApp] wrote error: "file or directory does not exist: 'bfx-containers/protein_function_modeling/src/train_mean_rep_MLP.py'"
+[W 2023-06-07 18:04:21.711 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling/src/train_mean_rep_MLP.py?content=0&1686161061614 (10.70.0.224) 1.39ms referer=https://10.65.24.89:8888/lab
+[W 2023-06-07 18:04:22.391 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling?1686161062345 (10.70.0.224): file or directory does not exist: 'bfx-containers/protein_function_modeling'
+[W 2023-06-07 18:04:22.391 ServerApp] wrote error: "file or directory does not exist: 'bfx-containers/protein_function_modeling'"
+[W 2023-06-07 18:04:22.392 ServerApp] 404 GET /api/contents/bfx-containers/protein_function_modeling?1686161062345 (10.70.0.224) 1.00ms referer=https://10.65.24.89:8888/lab
+[I 2023-06-07 18:04:26.951 ServerApp] Creating new notebook in 
+[I 2023-06-07 18:04:27.315 ServerApp] Kernel started: 072c5ee5-52e2-4d5e-8d53-809c27454eb2
+[W 2023-06-07 18:04:27.495 ServerApp] SSL Error on 23 ('10.70.0.224', 59605): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:04:27.593 ServerApp] SSL Error on 23 ('10.70.0.224', 59607): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[I 2023-06-07 18:04:27.991 ServerApp] Starting buffering for 072c5ee5-52e2-4d5e-8d53-809c27454eb2:0453a55c-67fb-4cf4-ad87-969c504225ca
+[W 2023-06-07 18:04:28.004 ServerApp] SSL Error on 34 ('10.70.0.224', 59609): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[I 2023-06-07 18:04:35.576 ServerApp] Kernel shutdown: 072c5ee5-52e2-4d5e-8d53-809c27454eb2
+[W 2023-06-07 18:04:43.726 ServerApp] delete /Untitled.ipynb
+[W 2023-06-07 18:28:43.297 ServerApp] SSL Error on 8 ('10.70.0.224', 60618): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:28:43.317 ServerApp] SSL Error on 10 ('10.70.0.224', 60619): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:28:43.318 ServerApp] SSL Error on 11 ('10.70.0.224', 60620): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:28:43.323 ServerApp] SSL Error on 12 ('10.70.0.224', 60622): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:28:43.324 ServerApp] SSL Error on 13 ('10.70.0.224', 60621): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:31:14.437 ServerApp] SSL Error on 8 ('10.70.0.224', 60954): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:31:14.437 ServerApp] SSL Error on 10 ('10.70.0.224', 60955): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:31:14.452 ServerApp] SSL Error on 12 ('10.70.0.224', 60957): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:31:14.453 ServerApp] SSL Error on 11 ('10.70.0.224', 60956): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:36:48.869 ServerApp] SSL Error on 8 ('10.70.0.224', 61854): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:36:48.890 ServerApp] SSL Error on 10 ('10.70.0.224', 61856): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:36:48.893 ServerApp] SSL Error on 11 ('10.70.0.224', 61855): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:36:48.893 ServerApp] SSL Error on 12 ('10.70.0.224', 61857): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:43:42.652 ServerApp] SSL Error on 10 ('10.70.0.224', 62067): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:43:42.653 ServerApp] SSL Error on 8 ('10.70.0.224', 62065): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:43:42.659 ServerApp] SSL Error on 12 ('10.70.0.224', 62069): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:43:42.659 ServerApp] SSL Error on 11 ('10.70.0.224', 62066): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 18:43:42.659 ServerApp] SSL Error on 13 ('10.70.0.224', 62068): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:41.742 ServerApp] SSL Error on 8 ('10.70.1.167', 53734): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:41.743 ServerApp] SSL Error on 10 ('10.70.1.167', 53735): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:42.254 ServerApp] SSL Error on 11 ('10.70.1.167', 53737): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:42.254 ServerApp] SSL Error on 13 ('10.70.1.167', 53739): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:42.266 ServerApp] SSL Error on 14 ('10.70.1.167', 53740): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:42.267 ServerApp] SSL Error on 12 ('10.70.1.167', 53741): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:42.267 ServerApp] SSL Error on 21 ('10.70.1.167', 53738): [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] sslv3 alert certificate unknown (_ssl.c:997)
+[W 2023-06-07 23:28:46.559 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2023-06-07 23:28:57.380 ServerApp] Shutting down on /api/shutdown request.
+[I 2023-06-07 23:28:57.380 ServerApp] Shutting down 3 extensions
+[I 2023-06-07 23:28:57.381 ServerApp] Shutting down 0 terminals
+
+  _   _          _      _
+ | | | |_ __  __| |__ _| |_ ___
+ | |_| | '_ \/ _` / _` |  _/ -_)
+  \___/| .__/\__,_\__,_|\__\___|
+       |_|
+                                                                           
+Read the migration plan to Notebook 7 to learn about the new features and the actions to take if you are using extensions.
+
+https://jupyter-notebook.readthedocs.io/en/latest/migrate_to_notebook7.html
+
+Please note that updating to Notebook 7 might break some of your extensions.
+
