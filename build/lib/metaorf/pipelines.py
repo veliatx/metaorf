@@ -92,7 +92,7 @@ def define_jobs(sample_sheet, params):
     return sample_df, jobs_df, default_params 
 
 
-def submit_jobs(experiment_name, params, job_list):
+def submit_jobs(experiment_name, params, job_list, run_locally=False):
     """
     Submit batch jobs
 
@@ -119,7 +119,7 @@ def submit_jobs(experiment_name, params, job_list):
             curr_job_ids = [job_id for sublist in curr_job_ids for job_id in sublist]
         else:
             job = job(experiment_name, copy.deepcopy(params))
-            curr_job_ids = job.submit(dependencies=prev_job_ids)
+            curr_job_ids = job.submit(dependencies=prev_job_ids, run_locally=run_locally)
 
         prev_job_ids = curr_job_ids
         curr_job_ids = []
@@ -128,6 +128,7 @@ def submit_jobs(experiment_name, params, job_list):
 @click.command()
 @click.argument('sample_sheet', type=pathlib.Path)
 @click.option('--skip_orfcalling', default=False, help='Only run alignment tasks')
+@click.option('--run_locally', default=False, help='Run jobs locally')
 def main(sample_sheet, skip_orfcalling):
     """
     SAMPLE_SHEET is a conforming CSV file
@@ -149,6 +150,6 @@ def main(sample_sheet, skip_orfcalling):
                     jobs.PostprocessData,
                     jobs.UploadData,
                     jobs.CleanDirectories]
-        submit_jobs(experiment_name, params, job_list) 
+        submit_jobs(experiment_name, params, job_list, run_locally = run_locally) 
 
 
