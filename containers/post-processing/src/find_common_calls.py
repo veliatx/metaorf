@@ -105,7 +105,7 @@ def write_overlaps_into_bed(merged_orf_calls, overlap_bed_file, orf_callers):
 
 
 def read_transcript_list(transcript_list_file, rna_seq_name, threshold):
-    if rna_seq_name is None:
+    if rna_seq_name is None or rna_seq_name == "":
         return None
     
     transcript_table = pd.read_csv(transcript_list_file, sep="\t")

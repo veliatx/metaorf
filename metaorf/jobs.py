@@ -5,6 +5,20 @@ import os
 
 from metaorf import utils
 from pathlib import Path
+import subprocess
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+JOB_DEFINITION_TO_CONTAINER_NAME = {
+    'arn:aws:batch:us-west-2:328315166908:job-definition/ribo_mapping:4': 'ribo_mapping',
+    'arn:aws:batch:us-west-2:328315166908:job-definition/ribocode:2': 'ribocode',
+    'arn:aws:batch:us-west-2:328315166908:job-definition/ribotish:1': 'ribotish',
+    'arn:aws:batch:us-west-2:328315166908:job-definition/price_docker_test:7': 'price',
+    'arn:aws:batch:us-west-2:328315166908:job-definition/orfquant:3': 'orfquant',
+    'arn:aws:batch:us-west-2:328315166908:job-definition/post_processing:2': 'post-processing',
+}
 
 
 class Job:
@@ -43,21 +57,33 @@ class Job:
         self.command_list = command_list
 
 
-    def submit(self, dependencies):
+    def submit(self, dependencies, run_locally=False):
         """"""
         job_id_list = []
         for command in self.command_list:
             command = [str(c) for c in command]
-            response = boto3.client('batch', 'us-west-2').submit_job(
-                jobName = self.params['jobName'],
-                jobQueue = self.params['jobQueue'],
-                jobDefinition = self.params['jobDefinition'],
-                containerOverrides = {
-                    'command': command,
-                },
-                dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in dependencies],
-            )
-            job_id_list.append(response['jobId'])
+            if run_locally:
+                docker_command = ' '.join(command)
+                container_name = f'328315166908.dkr.ecr.us-west-2.amazonaws.com/{JOB_DEFINITION_TO_CONTAINER_NAME[self.params["jobDefinition"]]}:latest'
+                docker_run_command = f"docker run {self.params['docker_mount_flag']} {container_name} {docker_command}"
+                logging.info("Docker command to run inside container: %s", docker_run_command)
+                try:
+                    result = subprocess.run(docker_run_command, shell=True, capture_output=True, text=True, check=True)
+                    logging.info("Docker run output:\n%s", result.stdout)
+                except subprocess.CalledProcessError as error:
+                    logging.error("Docker run failed: \n %s", error.stderr)
+                    raise subprocess.CalledProcessError
+            else:
+                response = boto3.client('batch', 'us-west-2').submit_job(
+                    jobName = self.params['jobName'],
+                    jobQueue = self.params['jobQueue'],
+                    jobDefinition = self.params['jobDefinition'],
+                    containerOverrides = {
+                        'command': command,
+                    },
+                    dependsOn=[{'jobId': job_id, 'type': 'N_TO_N'} for job_id in dependencies],
+                )
+                job_id_list.append(response['jobId'])
 
         return job_id_list
 
