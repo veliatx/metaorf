@@ -12,6 +12,8 @@ RUN apt-get update && \
 RUN wget -P /tmp \
     "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
     && bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda \
+    && /opt/conda/bin/conda install -y python=3.11 \
+    && /opt/conda/bin/conda clean -afy \
     && rm /tmp/Miniconda3-latest-Linux-x86_64.sh
 ENV PATH /opt/conda/bin:$PATH
 
