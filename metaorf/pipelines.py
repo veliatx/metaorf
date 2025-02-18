@@ -48,7 +48,8 @@ def submit_jobs(experiment_name, params, job_list, run_locally=False):
         List of jobs to run in DAG format
 
     """
-    utils.create_piperun_folders(experiment_name, params)
+    if params['bucket_name'] is not None:
+        utils.create_piperun_folders(experiment_name, params)
 
     prev_job_ids = []
     curr_job_ids = []
