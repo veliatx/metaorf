@@ -276,7 +276,7 @@ class PostprocessData(Job):
         params['jobName'] = f'{experiment_name}_{job_type}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/post_processing:2'
         
-        if 'transcript_list_file' in params:
+        if 'transcript_list_file' in params and params['rna_seq_name'] is not None:
             data_process_cmd = [
                 'python3', 'src/main_run_post_processing.py',
                 '--experiment_name', experiment_name,

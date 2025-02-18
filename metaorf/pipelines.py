@@ -84,7 +84,7 @@ def submit_jobs(experiment_name, params, job_list, run_locally=False):
 @click.option('--callers', default='price,ribotish,ribocode', help='Comma-separated list of ORF callers')
 @click.option('--jobQueue', default='bfx-jq-metaorf', help='AWS Batch job queue')
 @click.option('--jobQueue_large_instance', default='bfx-jq-general', help='AWS Batch job queue for large instances')
-@click.option('--bucket_name', default='velia-piperuns-dev', help='S3 bucket name')
+@click.option('--bucket_name', default=None, help="S3 bucket name to upload results. If empty results won't be synced. (standard is velia-piperuns-dev)")
 @click.option('--transcript_list_file', default='transcript_TPM_240419.tsv', help='Transcript list file')
 def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag, input_dir, output_dir, annotation_dir, 
          contaminant_genomes, reference_genomes, genome_annotation_prefix, contaminant_genome_index,
@@ -92,6 +92,8 @@ def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag
     """
     SAMPLE_SHEET is a conforming CSV file
     """
+    if bucket_name == 'None':
+        bucket_name = None
     timestamp = datetime.today().strftime('%Y%m%d%H%M%S')
     if input_dir is None:
         input_dir = f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}'
@@ -126,14 +128,16 @@ def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag
         "ribocode": jobs.Ribocode,
         "orfquant": jobs.Orfquant}
     orf_call_jobs = tuple([orf_callers[caller] for caller in params["callers"].split(",")])
+    if bucket_name is None and not run_locally:
+        raise ValueError("Must supply a bucket name to sync results if using Batch.")
     for experiment_name, params in piperun_dicts.items():
         if run_locally:
             job_list = [jobs.PrepareData, 
                         jobs.PreprocessData,
                         *orf_call_jobs,
-                        jobs.PostprocessData,
-                        jobs.UploadData,
-                        jobs.CleanDirectories]
+                        jobs.PostprocessData]
+            if bucket_name is not None:
+                job_list += [jobs.UploadData, jobs.CleanDirectories]
         else:
             job_list = [jobs.PrepareData, 
                         jobs.PreprocessData,
