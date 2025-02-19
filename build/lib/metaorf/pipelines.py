@@ -29,67 +29,9 @@ def define_jobs(sample_sheet, params):
 
     """
     sample_df, jobs_df = utils.parse_samplesheet(sample_sheet)
-
     timestamp = datetime.today().strftime('%Y%m%d%H%M%S')
-
-    # default_params = {
-    #     'multimap': 10,
-    #     'skip_orfcalling': False,
-    #     'timestamp': timestamp,
-    #     'input_dir': f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}',
-    #     'output_dir': f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}',
-    #     'annotation_dir': '/mount/efs/riboseq_callers/data/ORFrater/human_GRCh38_p14',
-    #     'contaminant_genomes': 'hg38_rRNA.fa,hg38_tRNA.fa',
-    #     'reference_genomes': 'GRCh38.p14.genome.fa',
-    #     'genome_annotation_prefix': 'veliadb_v1_1.fixed',
-    #     'contaminant_genome_index': 'star',
-    #     'reference_genome_index': 'star',
-    #     'callers': 'price,ribotish,ribocode,orfquant',
-    #     'jobQueue': 'bfx-jq-metaorf',
-    #     'jobQueue_large_instance': 'bfx-jq-general',
-    #     'bucket_name': 'velia-piperuns-dev'
-    # }
-
-    default_params = {
-        'multimap': 10,
-        'skip_orfcalling': False,
-        'timestamp': timestamp,
-        'input_dir': f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}',
-        'output_dir': f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}',
-        'annotation_dir': '/mount/efs/riboseq_callers/data/ORFrater/human_GRCh38_p14',
-        'contaminant_genomes': 'hg38_rRNA.fa,hg38_tRNA.fa',
-        'reference_genomes': 'GRCh38.p14.genome.fa', # 'GRCh38.p13.genome.fa',
-        'genome_annotation_prefix': 'veliadb_v1_1.fixed', # 'veliadb_v2.fixed',
-        'contaminant_genome_index': 'star_veliadb_v1_1',
-        'reference_genome_index': 'star_veliadb_v1_1',
-        'callers': 'price,ribotish,ribocode',
-        'jobQueue': 'bfx-jq-metaorf',
-        'jobQueue_large_instance': 'bfx-jq-general',
-        'bucket_name': 'velia-piperuns-dev',
-        'transcript_list_file': 'transcript_TPM_240419.tsv',
-    }
-
-    # default_params = {
-    #     'multimap': 10,
-    #     'skip_orfcalling': False,
-    #     'timestamp': timestamp,
-    #     'input_dir': f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}',
-    #     'output_dir': f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}',
-    #     'annotation_dir': '/mount/efs/riboseq_callers/data/ORFrater/mouse_GRCm39',
-    #     'contaminant_genomes': 'mm10_rRNA.fa,mm10_tRNA.fa',
-    #     'reference_genomes': 'GRCm39.primary_assembly.genome.fa',
-    #     'genome_annotation_prefix': 'gencode.vM35.primary_assembly.annotation',
-    #     'contaminant_genome_index': 'star',
-    #     'reference_genome_index': 'star',
-    #     'callers': 'price,ribotish,ribocode',
-    #     'jobQueue': 'bfx-jq-metaorf',
-    #     'jobQueue_large_instance': 'bfx-jq-general',
-    #     'bucket_name': 'velia-piperuns-dev'
-    # }
-
-    default_params.update(params)
-
-    return sample_df, jobs_df, default_params 
+    params['timestamp'] = timestamp
+    return sample_df, jobs_df, params
 
 
 def submit_jobs(experiment_name, params, job_list, run_locally=False):
@@ -106,7 +48,8 @@ def submit_jobs(experiment_name, params, job_list, run_locally=False):
         List of jobs to run in DAG format
 
     """
-    utils.create_piperun_folders(experiment_name, params)
+    if params['bucket_name'] is not None:
+        utils.create_piperun_folders(experiment_name, params)
 
     prev_job_ids = []
     curr_job_ids = []
@@ -127,14 +70,59 @@ def submit_jobs(experiment_name, params, job_list, run_locally=False):
 
 @click.command()
 @click.argument('sample_sheet', type=pathlib.Path)
-@click.option('--skip_orfcalling', default=False, help='Only run alignment tasks')
-@click.option('--run_locally', default=False, help='Run jobs locally')
-def main(sample_sheet, skip_orfcalling):
+@click.option('--multimap', default=10, help='Maximum number of multimapping reads')
+@click.option('--skip_orfcalling', is_flag=True, help='Only run alignment tasks')
+@click.option('--run_locally', is_flag=True, help='Run jobs locally')
+@click.option('--docker_mount_flag', default='-v /efs:/mount/efs', help='Docker flag to mount additional drives within containers. E.g. -v /src:/container/dest')
+@click.option('--input_dir', default=None, help='Input directory path')
+@click.option('--output_dir', default=None, help='Output directory path')
+@click.option('--annotation_dir', default='/mount/efs/riboseq_callers/data/ORFrater/human_GRCh38_p14', help='Annotation directory path (within containers)')
+@click.option('--contaminant_genomes', default='hg38_rRNA.fa,hg38_tRNA.fa', help='Comma-separated list of contaminant genome files')
+@click.option('--reference_genomes', default='GRCh38.p14.genome.fa', help='Reference genome file')
+@click.option('--genome_annotation_prefix', default='veliadb_v1_1.fixed', help='Genome annotation prefix')
+@click.option('--contaminant_genome_index', default='star_veliadb_v1_1', help='Contaminant genome index')
+@click.option('--reference_genome_index', default='star_veliadb_v1_1', help='Reference genome index')
+@click.option('--callers', default='price,ribotish,ribocode', help='Comma-separated list of ORF callers')
+@click.option('--jobQueue', default='bfx-jq-metaorf', help='AWS Batch job queue')
+@click.option('--jobQueue_large_instance', default='bfx-jq-general', help='AWS Batch job queue for large instances')
+@click.option('--bucket_name', default=None, help="S3 bucket name to upload results. If empty results won't be synced. (standard is velia-piperuns-dev)")
+@click.option('--transcript_list_file', default='transcript_TPM_240419.tsv', help='Transcript list file')
+@click.option('--dry_run', is_flag = True, help='Just print run commands for local runs. Do NOT execute them.')
+def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag, input_dir, output_dir, annotation_dir, 
+         contaminant_genomes, reference_genomes, genome_annotation_prefix, contaminant_genome_index,
+         reference_genome_index, callers, jobqueue, jobqueue_large_instance, bucket_name, transcript_list_file):
     """
     SAMPLE_SHEET is a conforming CSV file
     """
-    options = {"skip_orfcalling": skip_orfcalling}
-    sample_df, jobs_df, params = define_jobs(sample_sheet, options)
+    if bucket_name == 'None':
+        bucket_name = None
+    timestamp = datetime.today().strftime('%Y%m%d%H%M%S')
+    if input_dir is None:
+        input_dir = f'/mount/efs/riboseq_callers/data/ORFrater/input_batch_tmp_{timestamp}'
+    if output_dir is None:
+        output_dir = f'/mount/efs/riboseq_callers/data/ORFrater/output_batch_tmp_{timestamp}'
+
+    params = {
+        'multimap': multimap,
+        'skip_orfcalling': skip_orfcalling,
+        'docker_mount_flag': docker_mount_flag,
+        'input_dir': input_dir,
+        'output_dir': output_dir,
+        'annotation_dir': annotation_dir,
+        'contaminant_genomes': contaminant_genomes,
+        'reference_genomes': reference_genomes,
+        'genome_annotation_prefix': genome_annotation_prefix,
+        'contaminant_genome_index': contaminant_genome_index,
+        'reference_genome_index': reference_genome_index,
+        'callers': callers,
+        'jobQueue': jobqueue,
+        'jobQueue_large_instance': jobqueue_large_instance,
+        'bucket_name': bucket_name,
+        'transcript_list_file': transcript_list_file,
+        'dry_run': dry_run
+    }
+
+    sample_df, jobs_df, params = define_jobs(sample_sheet, params)
     piperun_dicts = utils.build_param_dicts(sample_df, jobs_df, params)
 
     orf_callers = {
@@ -143,13 +131,23 @@ def main(sample_sheet, skip_orfcalling):
         "ribocode": jobs.Ribocode,
         "orfquant": jobs.Orfquant}
     orf_call_jobs = tuple([orf_callers[caller] for caller in params["callers"].split(",")])
+    if dry_run and not run_locally:
+        print('WARNING: Executing in batch mode, but with dry_run flag. Will still execute batch jobs.')
+    if bucket_name is None and not run_locally:
+        raise ValueError("Must supply a bucket name to sync results if using Batch.")
     for experiment_name, params in piperun_dicts.items():
-        job_list = [jobs.PrepareData, 
-                    jobs.PreprocessData,
-                    orf_call_jobs,
-                    jobs.PostprocessData,
-                    jobs.UploadData,
-                    jobs.CleanDirectories]
-        submit_jobs(experiment_name, params, job_list, run_locally = run_locally) 
-
-
+        if run_locally:
+            job_list = [jobs.PrepareData, 
+                        jobs.PreprocessData,
+                        *orf_call_jobs,
+                        jobs.PostprocessData]
+            if bucket_name is not None:
+                job_list += [jobs.UploadData, jobs.CleanDirectories]
+        else:
+            job_list = [jobs.PrepareData, 
+                        jobs.PreprocessData,
+                        orf_call_jobs,
+                        jobs.PostprocessData,
+                        jobs.UploadData,
+                        jobs.CleanDirectories]
+        submit_jobs(experiment_name, params, job_list, run_locally=run_locally)

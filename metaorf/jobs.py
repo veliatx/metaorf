@@ -68,8 +68,12 @@ class Job:
                 docker_run_command = f"docker run {self.params['docker_mount_flag']} {container_name} {docker_command}"
                 logging.info("Docker command to run inside container: %s", docker_run_command)
                 try:
-                    result = subprocess.run(docker_run_command, shell=True, capture_output=True, text=True, check=True)
-                    logging.info("Docker run output:\n%s", result.stdout)
+                    if params['dry_run']:
+                        print(docker_run_command)
+                        logging.info("Dry run.")
+                    else:
+                        result = subprocess.run(docker_run_command, shell=True, capture_output=True, text=True, check=True)
+                        logging.info("Docker run output:\n%s", result.stdout)
                 except subprocess.CalledProcessError as error:
                     logging.error("Docker run failed: \n %s", error.stderr)
                     raise subprocess.CalledProcessError

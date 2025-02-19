@@ -87,6 +87,7 @@ def submit_jobs(experiment_name, params, job_list, run_locally=False):
 @click.option('--jobQueue_large_instance', default='bfx-jq-general', help='AWS Batch job queue for large instances')
 @click.option('--bucket_name', default=None, help="S3 bucket name to upload results. If empty results won't be synced. (standard is velia-piperuns-dev)")
 @click.option('--transcript_list_file', default='transcript_TPM_240419.tsv', help='Transcript list file')
+@click.option('--dry_run', is_flag = True, help='Just print run commands for local runs. Do NOT execute them.')
 def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag, input_dir, output_dir, annotation_dir, 
          contaminant_genomes, reference_genomes, genome_annotation_prefix, contaminant_genome_index,
          reference_genome_index, callers, jobqueue, jobqueue_large_instance, bucket_name, transcript_list_file):
@@ -117,7 +118,8 @@ def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag
         'jobQueue': jobqueue,
         'jobQueue_large_instance': jobqueue_large_instance,
         'bucket_name': bucket_name,
-        'transcript_list_file': transcript_list_file
+        'transcript_list_file': transcript_list_file,
+        'dry_run': dry_run
     }
 
     sample_df, jobs_df, params = define_jobs(sample_sheet, params)
@@ -129,6 +131,8 @@ def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag
         "ribocode": jobs.Ribocode,
         "orfquant": jobs.Orfquant}
     orf_call_jobs = tuple([orf_callers[caller] for caller in params["callers"].split(",")])
+    if dry_run and not run_locally:
+        print('WARNING: Executing in batch mode, but with dry_run flag. Will still execute batch jobs.')
     if bucket_name is None and not run_locally:
         raise ValueError("Must supply a bucket name to sync results if using Batch.")
     for experiment_name, params in piperun_dicts.items():

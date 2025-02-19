@@ -1,0 +1,11 @@
+[Samples],,,,,,,,,,
+experiment_id,sample_id,R1_fastq_file,R2_fastq_file,I1_fastq_file,containing_folder,adaptor_sequence,organism,umi,,rna_seq_name
+HeLaS3-LoRes-rep2_SRR8449576,HeLaS3-LoRes-rep2_SRR8449576,SRR8449576_1.fastq.gz,,,s3://velia-archive-dev/velia/data/fastq/martinez_ncb/,AGATCGGAAGAGCACACGTCT,human,,,
+HeLaS3-LoRes-rep1_SRR8449575,HeLaS3-LoRes-rep1_SRR8449575,SRR8449575_1.fastq.gz,,,s3://velia-archive-dev/velia/data/fastq/martinez_ncb/,AGATCGGAAGAGCACACGTCT,human,,,
+,,,,,,,,,,
+,,,,,,,,,,
+[Riboseq_jobs],,,,,,,,,,
+CHX,TIS,Note,,,,,,,,
+HeLaS3-LoRes-rep2_SRR8449576,,HeLaS3-LoRes-rep2,,,,,,,,
+HeLaS3-LoRes-rep1_SRR8449575,,HeLaS3-LoRes-rep1,,,,,,,,
+
