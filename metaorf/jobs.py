@@ -68,8 +68,9 @@ class Job:
                 docker_run_command = f"docker run {self.params['docker_mount_flag']} {container_name} {docker_command}"
                 logging.info("Docker command to run inside container: %s", docker_run_command)
                 try:
-                    if params['dry_run']:
+                    if self.params['dry_run']:
                         print(docker_run_command)
+                        # print(self.params['rna_seq_name'], self.params['rna_seq_name']==None)
                         logging.info("Dry run.")
                     else:
                         result = subprocess.run(docker_run_command, shell=True, capture_output=True, text=True, check=True)
@@ -280,29 +281,29 @@ class PostprocessData(Job):
         params['jobName'] = f'{experiment_name}_{job_type}'
         params['jobDefinition'] = 'arn:aws:batch:us-west-2:328315166908:job-definition/post_processing:2'
         
-        if 'transcript_list_file' in params and params['rna_seq_name'] is not None:
-            data_process_cmd = [
-                'python3', 'src/main_run_post_processing.py',
-                '--experiment_name', experiment_name,
-                '--annotation_dir', params['annotation_dir'],
-                '--output_dir', params['output_dir'],
-                '--reference_genomes', params['reference_genomes'],
-                '--genome_annotation_prefix', params['genome_annotation_prefix'],
-                '--callers', params['callers'],
-                '--transcript_list_file', params['transcript_list_file'],
-                '--rna_seq_name', params['rna_seq_name'],
-                '--organism', params['organism'],
-                '--transcript_tpm_threshold', 0.5]
-        else:
-            data_process_cmd = [
-                'python3', 'src/main_run_post_processing.py',
-                '--experiment_name', experiment_name,
-                '--annotation_dir', params['annotation_dir'],
-                '--output_dir', params['output_dir'],
-                '--reference_genomes', params['reference_genomes'],
-                '--genome_annotation_prefix', params['genome_annotation_prefix'],
-                '--organism', params['organism'],
-                '--callers', params['callers']]
+        # if 'transcript_list_file' in params and params['rna_seq_name'] is not None:
+        #     data_process_cmd = [
+        #         'python3', 'src/main_run_post_processing.py',
+        #         '--experiment_name', experiment_name,
+        #         '--annotation_dir', params['annotation_dir'],
+        #         '--output_dir', params['output_dir'],
+        #         '--reference_genomes', params['reference_genomes'],
+        #         '--genome_annotation_prefix', params['genome_annotation_prefix'],
+        #         '--callers', params['callers'],
+        #         '--transcript_list_file', params['transcript_list_file'],
+        #         # '--rna_seq_name', params['rna_seq_name'],
+        #         '--organism', params['organism']]
+        #         # '--transcript_tpm_threshold', 0.5]
+        # else:
+        data_process_cmd = [
+            'python3', 'src/main_run_post_processing.py',
+            '--experiment_name', experiment_name,
+            '--annotation_dir', params['annotation_dir'],
+            '--output_dir', params['output_dir'],
+            '--reference_genomes', params['reference_genomes'],
+            '--genome_annotation_prefix', params['genome_annotation_prefix'],
+            '--organism', params['organism'],
+            '--callers', params['callers']]
     
         super().__init__(params, [data_process_cmd])
 

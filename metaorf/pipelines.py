@@ -86,11 +86,11 @@ def submit_jobs(experiment_name, params, job_list, run_locally=False):
 @click.option('--jobQueue', default='bfx-jq-metaorf', help='AWS Batch job queue')
 @click.option('--jobQueue_large_instance', default='bfx-jq-general', help='AWS Batch job queue for large instances')
 @click.option('--bucket_name', default=None, help="S3 bucket name to upload results. If empty results won't be synced. (standard is velia-piperuns-dev)")
-@click.option('--transcript_list_file', default='transcript_TPM_240419.tsv', help='Transcript list file')
+# @click.option('--transcript_list_file', default='transcript_TPM_240419.tsv', help='Transcript list file')
 @click.option('--dry_run', is_flag = True, help='Just print run commands for local runs. Do NOT execute them.')
 def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag, input_dir, output_dir, annotation_dir, 
          contaminant_genomes, reference_genomes, genome_annotation_prefix, contaminant_genome_index,
-         reference_genome_index, callers, jobqueue, jobqueue_large_instance, bucket_name, transcript_list_file):
+         reference_genome_index, callers, jobqueue, jobqueue_large_instance, bucket_name, dry_run):
     """
     SAMPLE_SHEET is a conforming CSV file
     """
@@ -118,7 +118,7 @@ def main(sample_sheet, multimap, skip_orfcalling, run_locally, docker_mount_flag
         'jobQueue': jobqueue,
         'jobQueue_large_instance': jobqueue_large_instance,
         'bucket_name': bucket_name,
-        'transcript_list_file': transcript_list_file,
+        # 'transcript_list_file': transcript_list_file,
         'dry_run': dry_run
     }
 
